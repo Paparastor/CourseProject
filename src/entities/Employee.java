@@ -6,10 +6,10 @@ public class Employee implements IEntity {
 	private String passport;
 	private String name;
 	private String profession;
-	private int pointID;
+	private String pointID;
 	
 	public Employee(String employeeID, String passport, String name,
-			String profession, int pointID) {
+			String profession, String pointID) {
 		super();
 		this.employeeID = employeeID;
 		this.passport = passport;
@@ -50,11 +50,11 @@ public class Employee implements IEntity {
 		this.profession = profession;
 	}
 
-	public int getPointID() {
-		return pointID;
+	public String getPointID() {
+		return String.valueOf(pointID);
 	}
 
-	public void setPointID(int pointID) {
+	public void setPointID(String pointID) {
 		this.pointID = pointID;
 	}
 	

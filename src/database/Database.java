@@ -15,8 +15,8 @@ public class Database {
 	public static void initializeDatabase() {
 		Connector.initializeConnection();
 		connection = Connector.getConnection();
-		
-		//Tables initialization
+
+		// Tables initialization
 		update(Points.getCreationQuery());
 		update(Employees.getCreationQuery());
 		update(Timesheets.getCreationQuery());
@@ -54,7 +54,7 @@ public class Database {
 
 	// 'employees' representation
 	public static class Employees {
-		
+
 		private static final String SQL_SPECS = "CREATE TABLE IF NOT EXISTS EMPLOYEES"
 				+ " (EMPLOYEE_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
 				+ " PASSPORT TEXT NOT NULL,"
@@ -67,18 +67,35 @@ public class Database {
 			return SQL_SPECS;
 		}
 
+		// Getting all rows from 'employees'
+		public static ResultSet getAll() {
+			return getResultSet("select * from employees");
+		}
+
 		// Adding a new employee to 'employees'
 		public static void addEmployee(Employee employee) {
-			//Employee employee = (Employee)rowInfo;
+			// Employee employee = (Employee)rowInfo;
 			update("insert into employees values(" + employee.getEmployeeID()
-			+ "," + "\"" + employee.getPassport() + "\"" + "," + "\""
-			+ employee.getName() + "\"" + "," + "\""
-			+ employee.getProfession() + "\"" + ","
-			+ employee.getPointID() + ");");
+					+ "," + "\"" + employee.getPassport() + "\"" + "," + "\""
+					+ employee.getName() + "\"" + "," + "\""
+					+ employee.getProfession() + "\"" + ","
+					+ employee.getPointID() + ");");
+		}
+
+		// Editing employee with given value
+		public static void editEmployee(String employeeID, Employee newEmployee) {
+			// Employee employee = (Employee)rowInfo;
+			update("update employees set " 
+					+ "EMPLOYEE_ID = " + newEmployee.getEmployeeID()
+					+ ", PASSPORT = " + newEmployee.getPassport() 
+					+ ", NAME = " + newEmployee.getName() 
+					+ ", PROFESSION = " + newEmployee.getProfession() 
+					+ ", POINT_ID = " + newEmployee.getPointID() + " where EMPLOYEE_ID = " + employeeID + ";");
 		}
 
 		// Getting an employee from 'employees'
-		public static Employee getEmployee(int id) throws NumberFormatException, SQLException {
+		public static Employee getEmployee(String id)
+				throws NumberFormatException, SQLException {
 			Employee employee;
 			ResultSet resultSet = getResultSet("Select * from employees where EMPLOYEE_ID="
 					+ id + ";");
@@ -86,7 +103,7 @@ public class Database {
 					resultSet.getString("PASSPORT"),
 					resultSet.getString("NAME"),
 					resultSet.getString("PROFESSION"),
-					Integer.parseInt(resultSet.getString("EMPLOYEE_ID")));
+					resultSet.getString("EMPLOYEE_ID"));
 			return employee;
 		}
 
@@ -98,9 +115,14 @@ public class Database {
 		public static final String SQL_SPECS = "CREATE TABLE IF NOT EXISTS POINTS"
 				+ "(POINT_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
 				+ "SALARY INTEGER NOT NULL," + "POST TEXT NOT NULL)";
-		
+
 		public static String getCreationQuery() {
 			return SQL_SPECS;
+		}
+
+		// Getting all rows from 'points'
+		public static ResultSet getAll() {
+			return getResultSet("select * from points;");
 		}
 
 		// Adding a new point to 'points'
@@ -110,7 +132,7 @@ public class Database {
 					+ ");");
 		}
 
-		//Getting a point from 'points'
+		// Getting a point from 'points'
 		public static Point getPoint(int id) throws NumberFormatException,
 				SQLException {
 			Point point;
@@ -132,9 +154,14 @@ public class Database {
 				+ "DATE DATETIME NOT NULL,"
 				+ "PLAN_PERCENTAGE INTEGER NOT NULL,"
 				+ " FOREIGN KEY(EMPLOYEE_ID) REFERENCES EMPLOYEES(EMPLOYEE_ID))";
-		
+
 		public static String getCreationQuery() {
 			return SQL_SPECS;
+		}
+
+		// Getting all rows from 'timesheets'
+		public static ResultSet getAll() {
+			return getResultSet("select * from timesheets");
 		}
 
 		// Adding a new time sheet to 'timesheets'
@@ -147,13 +174,12 @@ public class Database {
 		}
 
 		// Getting a time sheet from 'timesheets'
-		public static Timesheet getTimesheet(int id) throws NumberFormatException,
-				SQLException {
+		public static Timesheet getTimesheet(int id)
+				throws NumberFormatException, SQLException {
 			Timesheet timesheet;
 			ResultSet resultSet = getResultSet("Select * from timesheets where TIMESHEET_ID="
 					+ id + ";");
-			timesheet = new Timesheet(
-					resultSet.getString("TIMESHEET_ID"),
+			timesheet = new Timesheet(resultSet.getString("TIMESHEET_ID"),
 					resultSet.getString("EMPLOYEE_ID"),
 					resultSet.getString("DATE"),
 					resultSet.getString("PLAN_PERCENTAGE"));
