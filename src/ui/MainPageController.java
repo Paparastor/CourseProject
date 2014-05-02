@@ -38,10 +38,8 @@ public class MainPageController implements ActionListener,
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
 		if (!arg0.getValueIsAdjusting()) { 										// Preventing a double event firing
-			String a = new MyTableModel(Database.Employees.getAll())
-					.getValueAt(mainPage.getEmployees().getSelectedRow(), 0)
-					.toString();
-			EmployeeEditPage e = new EmployeeEditPage(a);
+			String a = new MyTableModel(Database.Employees.getAll()).getValueAt(mainPage.getEmployees().getSelectedRow(), 0).toString();
+			EmployeeEditPage e = new EmployeeEditPage(a, mainPage);
 			e.setVisible(true);
 		}
 	}

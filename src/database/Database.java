@@ -17,9 +17,14 @@ public class Database {
 		connection = Connector.getConnection();
 
 		// Tables initialization
-		update(Points.getCreationQuery());
-		update(Employees.getCreationQuery());
-		update(Timesheets.getCreationQuery());
+		try {
+			update(Points.getCreationQuery());
+			update(Employees.getCreationQuery());
+			update(Timesheets.getCreationQuery());
+		} catch (SQLException e) {
+			System.out.println("Error: something with tables.");
+		}
+
 	}
 
 	// Closing the database connection
@@ -41,15 +46,12 @@ public class Database {
 	}
 
 	// Setting information to database
-	public static void update(String query) {
+	public static void update(String query) throws SQLException {
 		Statement statement;
-		try {
-			statement = connection.createStatement();
-			statement.executeUpdate(query);
-			statement.close();
-		} catch (SQLException e) {
-			e.printStackTrace();
-		}
+		statement = connection.createStatement();
+		statement.executeUpdate(query);
+		statement.close();
+
 	}
 
 	// 'employees' representation
@@ -73,7 +75,7 @@ public class Database {
 		}
 
 		// Adding a new employee to 'employees'
-		public static void addEmployee(Employee employee) {
+		public static void addEmployee(Employee employee) throws SQLException {
 			// Employee employee = (Employee)rowInfo;
 			update("insert into employees values(" + employee.getEmployeeID()
 					+ "," + "\"" + employee.getPassport() + "\"" + "," + "\""
@@ -83,14 +85,16 @@ public class Database {
 		}
 
 		// Editing employee with given value
-		public static void editEmployee(String employeeID, Employee newEmployee) {
+		public static void editEmployee(String employeeID, Employee newEmployee)
+				throws SQLException {
 			// Employee employee = (Employee)rowInfo;
-			update("update employees set " 
-					+ "EMPLOYEE_ID = " + newEmployee.getEmployeeID()
-					+ ", PASSPORT = "+ "'" + newEmployee.getPassport() + "'"
-					+ ", NAME = " + "'" + newEmployee.getName() + "'"
-					+ ", PROFESSION = "+ "'" + newEmployee.getProfession() + "'"
-					+ ", POINT_ID = " + newEmployee.getPointID() + " where EMPLOYEE_ID = " + employeeID + ";");
+			update("update employees set " + "EMPLOYEE_ID = "
+					+ newEmployee.getEmployeeID() + ", PASSPORT = " + "'"
+					+ newEmployee.getPassport() + "'" + ", NAME = " + "'"
+					+ newEmployee.getName() + "'" + ", PROFESSION = " + "'"
+					+ newEmployee.getProfession() + "'" + ", POINT_ID = "
+					+ newEmployee.getPointID() + " where EMPLOYEE_ID = "
+					+ employeeID + ";");
 		}
 
 		// Getting an employee from 'employees'
@@ -106,7 +110,7 @@ public class Database {
 					resultSet.getString("POINT_ID"));
 			return employee;
 		}
-
+		
 	}
 
 	// 'points' representation
@@ -114,7 +118,8 @@ public class Database {
 
 		public static final String SQL_SPECS = "CREATE TABLE IF NOT EXISTS POINTS"
 				+ "(POINT_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-				+ "SALARY INTEGER NOT NULL," + "POST TEXT NOT NULL)";
+				+ "SALARY INTEGER NOT NULL," 
+				+ "POST TEXT NOT NULL)";
 
 		public static String getCreationQuery() {
 			return SQL_SPECS;
@@ -126,10 +131,21 @@ public class Database {
 		}
 
 		// Adding a new point to 'points'
-		public static void addPoint(Point point) {
+		public static void addPoint(Point point) throws SQLException {
 			update("insert into points values(" + point.getPointID() + ","
 					+ point.getSalary() + "," + "\"" + point.getPost() + "\""
 					+ ");");
+		}
+
+		// Editing employee with given value
+		public static void editPoint(String pointID, Point newPoint)
+				throws SQLException {
+			// Employee employee = (Employee)rowInfo;
+			update("update points set " + "POINT_ID = "
+					+ newPoint.getPointID() 
+					+ ", SALARY = "	+ newPoint.getSalary() 
+					+ ", POST = " + "'" + newPoint.getPost()+ "'" 
+					+ " where POINT_ID = " + pointID + ";");
 		}
 
 		// Getting a point from 'points'
@@ -165,7 +181,8 @@ public class Database {
 		}
 
 		// Adding a new time sheet to 'timesheets'
-		public static void addTimesheet(Timesheet timesheet) {
+		public static void addTimesheet(Timesheet timesheet)
+				throws SQLException {
 			update("insert into timesheets values("
 					+ timesheet.getTimesheetID() + ","
 					+ timesheet.getEmployeeID() + "," + "\""

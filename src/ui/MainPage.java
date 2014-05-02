@@ -23,7 +23,9 @@ public class MainPage extends JFrame {
 	private JTable timesheets;
 	private JTabbedPane tablePane;
 
-	
+	public MainPageController getController() {
+		return controller;
+	}
 
 	public JTable getEmployees() {
 		return employees;

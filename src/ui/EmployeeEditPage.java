@@ -1,15 +1,7 @@
 package ui;
 
 import java.awt.FlowLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.sql.SQLException;
-
 import javax.swing.*;
-
-import database.Database;
-
-import entities.Employee;
 
 public class EmployeeEditPage extends JFrame {
 	
@@ -22,6 +14,7 @@ public class EmployeeEditPage extends JFrame {
 	private static final long serialVersionUID = 1L;
 	
 	private String employeeID;
+	private MainPage mainPage;
 	
 	private JTextField idTextField;
 	private JTextField passportTextField;
@@ -29,6 +22,10 @@ public class EmployeeEditPage extends JFrame {
 	private JTextField professionTextField;
 	private JTextField pointIDTextField;
 	
+	public MainPage getMainPage() {
+		return mainPage;
+	}
+
 	public JTextField getIdTextField() {
 		return idTextField;
 	}
@@ -53,9 +50,10 @@ public class EmployeeEditPage extends JFrame {
 		return pointIDTextField;
 	}
 
-	public EmployeeEditPage(String employeeID) {
+	public EmployeeEditPage(String employeeID, MainPage mainPage) {
 		
 		this.employeeID = employeeID;
+		this.mainPage = mainPage;
 		
 		// Setting the controller
 		controller = new EmployeeEditController(this);
@@ -110,19 +108,13 @@ public class EmployeeEditPage extends JFrame {
 		controller.fillAll();
 
 		// OK button
-		final JFrame j = this;
 		JButton ok = new JButton("OK");
 		ok.addActionListener(controller);
 		this.add(ok);
 
 		// Close button
 		JButton close = new JButton("Close");
-		close.addActionListener(new ActionListener() {
-			@Override
-			public void actionPerformed(ActionEvent arg0) {
-				j.dispose();
-			}
-		});
+		close.addActionListener(controller);
 		this.add(close);
 
 	}
