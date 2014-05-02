@@ -7,8 +7,8 @@ public class MainPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private final static int WIDTH = 500;
-	private final static int HEIGHT = 600;
+	private final static int WIDTH = 530;
+	private final static int HEIGHT = 570;
 
 	// Controller
 	private MainPageController controller;
@@ -48,7 +48,8 @@ public class MainPage extends JFrame {
 		this.setSize(WIDTH, HEIGHT);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-		this.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 
 		// Menu bar creation
 		menuBar = new JMenuBar();
@@ -87,10 +88,22 @@ public class MainPage extends JFrame {
 		menuBar.add(help);
 
 		menuPanel = new JPanel();
-		menuPanel.setLayout(new FlowLayout());
+		menuPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		menuPanel.add(menuBar);
 		this.add(menuPanel);
-
+		
+		// Buttons panel
+		JPanel buttonPanel = new JPanel();
+		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+		
+		JButton addButton = new JButton("Add");
+		buttonPanel.add(addButton);
+		
+		JButton deleteButton = new JButton("Delete");
+		buttonPanel.add(deleteButton);
+		
+		this.add(buttonPanel);
+		
 		// Table creation
 		employees = new JTable();
 		employees.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
