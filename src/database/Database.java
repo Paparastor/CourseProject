@@ -87,9 +87,9 @@ public class Database {
 			// Employee employee = (Employee)rowInfo;
 			update("update employees set " 
 					+ "EMPLOYEE_ID = " + newEmployee.getEmployeeID()
-					+ ", PASSPORT = " + newEmployee.getPassport() 
-					+ ", NAME = " + newEmployee.getName() 
-					+ ", PROFESSION = " + newEmployee.getProfession() 
+					+ ", PASSPORT = "+ "'" + newEmployee.getPassport() + "'"
+					+ ", NAME = " + "'" + newEmployee.getName() + "'"
+					+ ", PROFESSION = "+ "'" + newEmployee.getProfession() + "'"
 					+ ", POINT_ID = " + newEmployee.getPointID() + " where EMPLOYEE_ID = " + employeeID + ";");
 		}
 
@@ -103,7 +103,7 @@ public class Database {
 					resultSet.getString("PASSPORT"),
 					resultSet.getString("NAME"),
 					resultSet.getString("PROFESSION"),
-					resultSet.getString("EMPLOYEE_ID"));
+					resultSet.getString("POINT_ID"));
 			return employee;
 		}
 
