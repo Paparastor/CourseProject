@@ -74,6 +74,16 @@ public class Database {
 			return getResultSet("select * from employees");
 		}
 
+		public static int getEmployeesCount() {
+			ResultSet r = getResultSet("select count(*) from employees;");
+			try {
+				return r.getInt(0);
+			} catch (SQLException e) {
+				System.out.println("Count error");
+			}
+			return 0;
+		}
+
 		// Adding a new employee to 'employees'
 		public static void addEmployee(Employee employee) throws SQLException {
 			// Employee employee = (Employee)rowInfo;
@@ -97,6 +107,12 @@ public class Database {
 					+ employeeID + ";");
 		}
 
+		// Deleting employee with given value
+		public static void deleteEmployee(String employeeID)
+				throws SQLException {
+			update("delete from employees where EMPLOYEE_ID = " + employeeID);
+		}
+
 		// Getting an employee from 'employees'
 		public static Employee getEmployee(String id)
 				throws NumberFormatException, SQLException {
@@ -110,7 +126,7 @@ public class Database {
 					resultSet.getString("POINT_ID"));
 			return employee;
 		}
-		
+
 	}
 
 	// 'points' representation
@@ -118,8 +134,7 @@ public class Database {
 
 		public static final String SQL_SPECS = "CREATE TABLE IF NOT EXISTS POINTS"
 				+ "(POINT_ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,"
-				+ "SALARY INTEGER NOT NULL," 
-				+ "POST TEXT NOT NULL)";
+				+ "SALARY INTEGER NOT NULL," + "POST TEXT NOT NULL)";
 
 		public static String getCreationQuery() {
 			return SQL_SPECS;
@@ -137,15 +152,14 @@ public class Database {
 					+ ");");
 		}
 
-		// Editing employee with given value
+		// Editing point with given value
 		public static void editPoint(String pointID, Point newPoint)
 				throws SQLException {
 			// Employee employee = (Employee)rowInfo;
-			update("update points set " + "POINT_ID = "
-					+ newPoint.getPointID() 
-					+ ", SALARY = "	+ newPoint.getSalary() 
-					+ ", POST = " + "'" + newPoint.getPost()+ "'" 
-					+ " where POINT_ID = " + pointID + ";");
+			update("update points set " + "POINT_ID = " + newPoint.getPointID()
+					+ ", SALARY = " + newPoint.getSalary() + ", POST = " + "'"
+					+ newPoint.getPost() + "'" + " where POINT_ID = " + pointID
+					+ ";");
 		}
 
 		// Getting a point from 'points'
@@ -188,6 +202,18 @@ public class Database {
 					+ timesheet.getEmployeeID() + "," + "\""
 					+ timesheet.getDate() + "\"" + ","
 					+ timesheet.getPlanPercentage() + ");");
+		}
+
+		// Editing timesheet with given value
+		public static void editTimesheet(String timesheetID,
+				Timesheet newTimesheet) throws SQLException {
+			// Employee employee = (Employee)rowInfo;
+			update("update timesheets set " + " TIMESHEET_ID = "
+					+ newTimesheet.getTimesheetID() + ", EMPLOYEE_ID = "
+					+ newTimesheet.getEmployeeID() + ", DATE = " + "'"
+					+ newTimesheet.getDate() + "'" + ", PLAN_PERCENTAGE = "
+					+ newTimesheet.getPlanPercentage()
+					+ "where TIMESHEET_ID = " + timesheetID + ";");
 		}
 
 		// Getting a time sheet from 'timesheets'

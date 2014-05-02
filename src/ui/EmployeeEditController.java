@@ -10,7 +10,7 @@ import database.Database;
 import entities.Employee;
 
 public class EmployeeEditController implements ActionListener {
-
+	
 	private EmployeeEditPage page;
 
 	private Employee employee;
@@ -59,7 +59,18 @@ public class EmployeeEditController implements ActionListener {
 			}
 			
 		} else if (e.getActionCommand() == "Close") {
+			if (page.getMode()){
+				MyTableModel m = new MyTableModel(Database.Employees.getAll());
+				Integer index = m.getRowCount();
+				String neededID =  (String) m.getValueAt(index-1,0);
+				try {
+					Database.Employees.deleteEmployee(neededID);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+			}
 			page.dispose();
+			page.getMainPage().getController().updateTables();
 		}
 	}
 

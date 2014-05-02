@@ -62,6 +62,7 @@ public class MainPage extends JFrame {
 		JMenu addMenu = new JMenu("Add...");
 
 		JMenuItem emp = new JMenuItem("New Employee");
+		emp.addActionListener(controller);
 		addMenu.add(emp);
 
 		JMenuItem poi = new JMenuItem("New Point");

@@ -10,6 +10,11 @@ public class EmployeeEditPage extends JFrame {
 	private final static int WIDTH = 250;
 	private final static int HEIGHT = 250;
 	private final static int FIELD_SIZE = 10;
+	
+	public static final boolean MODE_EDIT = false;
+	public static final boolean MODE_ADD = true;
+
+	private boolean mode;
 
 	private static final long serialVersionUID = 1L;
 	
@@ -21,6 +26,10 @@ public class EmployeeEditPage extends JFrame {
 	private JTextField nameTextField;
 	private JTextField professionTextField;
 	private JTextField pointIDTextField;
+	
+	public boolean getMode() {
+		return mode;
+	}
 	
 	public MainPage getMainPage() {
 		return mainPage;
@@ -50,10 +59,11 @@ public class EmployeeEditPage extends JFrame {
 		return pointIDTextField;
 	}
 
-	public EmployeeEditPage(String employeeID, MainPage mainPage) {
+	public EmployeeEditPage(String employeeID, MainPage mainPage, boolean mode) {
 		
 		this.employeeID = employeeID;
 		this.mainPage = mainPage;
+		this.mode = mode;
 		
 		// Setting the controller
 		controller = new EmployeeEditController(this);
