@@ -9,6 +9,8 @@ public class MainPage extends JFrame {
 
 	private final static int WIDTH = 530;
 	private final static int HEIGHT = 570;
+	
+	private final static String ACTION_ADD = "New Employee";
 
 	// Controller
 	private MainPageController controller;
@@ -62,7 +64,7 @@ public class MainPage extends JFrame {
 		JMenu edit = new JMenu("Edit");
 		JMenu addMenu = new JMenu("Add...");
 
-		JMenuItem emp = new JMenuItem("New Employee");
+		JMenuItem emp = new JMenuItem(ACTION_ADD);
 		emp.addActionListener(controller);
 		addMenu.add(emp);
 
@@ -97,6 +99,8 @@ public class MainPage extends JFrame {
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		JButton addButton = new JButton("Add");
+		addButton.setActionCommand(ACTION_ADD);
+		addButton.addActionListener(controller);
 		buttonPanel.add(addButton);
 		
 		JButton deleteButton = new JButton("Delete");
