@@ -163,7 +163,7 @@ public class Database {
 		}
 
 		// Getting a point from 'points'
-		public static Point getPoint(int id) throws NumberFormatException,
+		public static Point getPoint(String id) throws NumberFormatException,
 				SQLException {
 			Point point;
 			ResultSet resultSet = getResultSet("Select * from points where POINT_ID="

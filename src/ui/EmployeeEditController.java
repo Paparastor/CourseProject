@@ -48,14 +48,15 @@ public class EmployeeEditController implements ActionListener {
 			try {
 				Database.Employees.editEmployee(employee.getEmployeeID(),
 						newEmployee);
-			} catch (SQLException e1) {
-				JOptionPane.showMessageDialog(page, "Sorry, there's something wrong.");
 				MainPage m = page.getMainPage();
 				MainPageController c = m.getController();
 				try {										
 					c.updateTables();
 					page.dispose();
 				} catch (Exception ex) {}			// I don't know where exception occurs!11
+				page.dispose();
+			} catch (SQLException e1) {
+				JOptionPane.showMessageDialog(page, "Sorry, there's something wrong.");
 			}
 			
 		} else if (e.getActionCommand() == "Close") {

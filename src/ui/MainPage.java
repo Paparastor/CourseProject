@@ -9,8 +9,6 @@ public class MainPage extends JFrame {
 
 	private final static int WIDTH = 530;
 	private final static int HEIGHT = 570;
-	
-	private final static String ACTION_ADD = "New Employee";
 
 	// Controller
 	private MainPageController controller;
@@ -24,6 +22,23 @@ public class MainPage extends JFrame {
 	private JTable points;
 	private JTable timesheets;
 	private JTabbedPane tablePane;
+	
+	// Menu items
+	private JMenuItem addEmployeeItem;
+	private JMenuItem addPointItem;
+	private JMenuItem addTimesheetItem;
+
+	public JMenuItem getAddEmployeeItem() {
+		return addEmployeeItem;
+	}
+
+	public JMenuItem getAddPointItem() {
+		return addPointItem;
+	}
+
+	public JMenuItem getAddTimesheetItem() {
+		return addTimesheetItem;
+	}
 
 	public MainPageController getController() {
 		return controller;
@@ -39,6 +54,10 @@ public class MainPage extends JFrame {
 
 	public JTable getTimesheets() {
 		return timesheets;
+	}
+	
+	public JTabbedPane getTablePane(){
+		return tablePane;
 	}
 
 	public MainPage() {
@@ -64,15 +83,16 @@ public class MainPage extends JFrame {
 		JMenu edit = new JMenu("Edit");
 		JMenu addMenu = new JMenu("Add...");
 
-		JMenuItem emp = new JMenuItem(ACTION_ADD);
-		emp.addActionListener(controller);
-		addMenu.add(emp);
+		addEmployeeItem = new JMenuItem(MainPageController.ACTION_ADD_EMPLOYEE);
+		addEmployeeItem.addActionListener(controller);
+		addMenu.add(addEmployeeItem);
 
-		JMenuItem poi = new JMenuItem("New Point");
-		addMenu.add(poi);
+		addPointItem = new JMenuItem(MainPageController.ACTION_ADD_POINT);
+		addPointItem.addActionListener(controller);
+		addMenu.add(addPointItem);
 
-		JMenuItem tim = new JMenuItem("New Timesheet");
-		addMenu.add(tim);
+		addTimesheetItem = new JMenuItem("New Timesheet");
+		addMenu.add(addTimesheetItem);
 
 		edit.add(addMenu);
 		menuBar.add(edit);
@@ -99,9 +119,14 @@ public class MainPage extends JFrame {
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		
 		JButton addButton = new JButton("Add");
-		addButton.setActionCommand(ACTION_ADD);
+		addButton.setActionCommand(MainPageController.ACTION_ADD);
 		addButton.addActionListener(controller);
 		buttonPanel.add(addButton);
+		
+		JButton editButton = new JButton("Edit");
+		editButton.setActionCommand(MainPageController.ACTION_EDIT);
+		editButton.addActionListener(controller);
+		buttonPanel.add(editButton);
 		
 		JButton deleteButton = new JButton("Delete");
 		buttonPanel.add(deleteButton);
@@ -110,13 +135,16 @@ public class MainPage extends JFrame {
 		
 		// Table creation
 		employees = new JTable();
+		employees.setName(MainPageController.NAME_EMPLOYEES);
 		employees.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		employees.getSelectionModel().addListSelectionListener(controller);
 
 		points = new JTable();
+		points.setName(MainPageController.NAME_POINTS);
 		points.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 
 		timesheets = new JTable();
+		timesheets.setName(MainPageController.NAME_TIMESHEETS);
 		timesheets.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		
 		controller.updateTables();

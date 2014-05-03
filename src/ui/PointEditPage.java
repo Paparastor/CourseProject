@@ -10,7 +10,7 @@ import javax.swing.JTextField;
 
 public class PointEditPage extends JFrame {
 
-	// private EmployeeEditController controller;
+	private PointEditController controller;
 
 	private final static int WIDTH = 250;
 	private final static int HEIGHT = 250;
@@ -61,7 +61,7 @@ public class PointEditPage extends JFrame {
 		this.mode = mode;
 
 		// Setting the controller
-		// controller = new EmployeeEditController(this);
+		controller = new PointEditController(this);
 
 		// Setting parameters of the frame
 		this.setName("PointEditPage");
@@ -88,7 +88,7 @@ public class PointEditPage extends JFrame {
 		// Post field
 		JPanel postPanel = new JPanel();
 		postPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		postPanel.add(new JLabel("Salary:"));
+		postPanel.add(new JLabel("Post:"));
 		postField = new JTextField(FIELD_SIZE);
 		postPanel.add(postField);
 		this.add(postPanel);
