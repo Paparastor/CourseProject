@@ -162,6 +162,11 @@ public class Database {
 					+ ";");
 		}
 
+		// Deleting point with given value
+		public static void deletePoint(String pointID) throws SQLException {
+			update("delete from points where POINT_ID = " + pointID);
+		}
+
 		// Getting a point from 'points'
 		public static Point getPoint(String id) throws NumberFormatException,
 				SQLException {
@@ -213,11 +218,17 @@ public class Database {
 					+ newTimesheet.getEmployeeID() + ", DATE = " + "'"
 					+ newTimesheet.getDate() + "'" + ", PLAN_PERCENTAGE = "
 					+ newTimesheet.getPlanPercentage()
-					+ "where TIMESHEET_ID = " + timesheetID + ";");
+					+ " where TIMESHEET_ID = " + timesheetID + ";");
+		}
+
+		// Deleting timesheet with given value
+		public static void deleteTimesheet(String timesheetID)
+				throws SQLException {
+			update("delete from timesheets where TIMESHEET_ID = " + timesheetID);
 		}
 
 		// Getting a time sheet from 'timesheets'
-		public static Timesheet getTimesheet(int id)
+		public static Timesheet getTimesheet(String id)
 				throws NumberFormatException, SQLException {
 			Timesheet timesheet;
 			ResultSet resultSet = getResultSet("Select * from timesheets where TIMESHEET_ID="

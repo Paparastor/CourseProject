@@ -7,62 +7,61 @@ import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
 import database.Database;
-import entities.Point;
+import entities.Timesheet;
 
-public class PointEditController implements ActionListener {
+public class TimesheetEditController implements ActionListener  {
 	
-	private PointEditPage page;
+	private TimesheetEditPage page;
 
-	private Point point;
+	private Timesheet timesheet;
 
-	public PointEditController(PointEditPage page) {
+	public TimesheetEditController(TimesheetEditPage page) {
 
 		this.page = page;
 
 		try {
-			point = Database.Points.getPoint(page.getPointID());
+			timesheet = Database.Timesheets.getTimesheet(page.getTimesheetID());
 		} catch (NumberFormatException e) {
 			System.out.println("Error: something with numbers...");
 		} catch (SQLException e) {
-			System.out.println("Error: unable to read point");
+			System.out.println("Error: unable to read timesheet");
 		}
 	}
 
 	public void fillAll() {
-		page.getPointIDField().setText(point.getPointID());
-		page.getSalaryTextField().setText(point.getSalary());
-		page.getPostTextField().setText(point.getPost());
+		page.getTimesheetIDField().setText(timesheet.getTimesheetID());
+		page.getEmployeeIDField().setText(timesheet.getEmployeeID());
+		page.getDateField().setText(timesheet.getDate());
+		page.getPlanField().setText(timesheet.getPlanPercentage());
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "OK") {
-			Point newPoint = new Point(
-					page.getPointIDField().getText(),
-					page.getSalaryTextField().getText(),
-					page.getPostTextField().getText());
+			Timesheet newTimesheet = new Timesheet(page.getTimesheetIDField().getText(),page.getEmployeeIDField().getText(),page.getDateField().getText(),
+					page.getPlanField().getText());
 			try {
-				Database.Points.editPoint(point.getPointID(),
-						newPoint);
+				Database.Timesheets.editTimesheet(timesheet.getTimesheetID(), newTimesheet);
 				MainPage m = page.getMainPage();
 				MainPageController c = m.getController();
 				try {
 					c.updateTables();
 				} catch (Exception ex) {
-				} 							// I don't know where exception occurs!11
+				} // I don't know where exception occurs!11
 				page.dispose();
 			} catch (SQLException e1) {
 				JOptionPane.showMessageDialog(page,
 						"Sorry, there's something wrong.");
-			} 
+				e1.printStackTrace();
+			}
 
 		} else if (e.getActionCommand() == "Close") {
 			if (page.getMode()) {
-				MyTableModel m = new MyTableModel(Database.Points.getAll());
+				MyTableModel m = new MyTableModel(Database.Timesheets.getAll());
 				Integer index = m.getRowCount();
 				String neededID = (String) m.getValueAt(index - 1, 0);
 				try {
-					Database.Points.deletePoint(neededID);
+					Database.Timesheets.deleteTimesheet(neededID);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

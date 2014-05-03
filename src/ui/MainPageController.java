@@ -1,6 +1,5 @@
 package ui;
 
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -12,6 +11,7 @@ import javax.swing.event.ListSelectionListener;
 import database.Database;
 import entities.Employee;
 import entities.Point;
+import entities.Timesheet;
 
 public class MainPageController implements ActionListener,
 		ListSelectionListener {
@@ -21,8 +21,10 @@ public class MainPageController implements ActionListener,
 	public final static String NAME_TIMESHEETS = "timesheets";
 
 	public final static String ACTION_ADD = "ADD";
+	
 	public final static String ACTION_ADD_EMPLOYEE = "New Employee";
 	public final static String ACTION_ADD_POINT = "New Point";
+	public final static String ACTION_ADD_TIMESHEET = "New Timesheet";
 
 	public final static String ACTION_EDIT = "Edit";
 
@@ -57,11 +59,14 @@ public class MainPageController implements ActionListener,
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == ACTION_ADD) {
 			switch(getSelectedTab()){
-			case ACTION_ADD_EMPLOYEE:
-				new ActionEvent(this,(int) System.currentTimeMillis(),ACTION_ADD_EMPLOYEE);
+			case NAME_EMPLOYEES:
+				this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,ACTION_ADD_EMPLOYEE));
 				break;
-			case ACTION_ADD_POINT:
-				new ActionEvent(this,(int) System.currentTimeMillis(),ACTION_ADD_POINT);
+			case NAME_POINTS:
+				this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,ACTION_ADD_POINT));
+				break;
+			case NAME_TIMESHEETS:
+				this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,ACTION_ADD_TIMESHEET));
 				break;
 			}
 		}
@@ -106,6 +111,26 @@ public class MainPageController implements ActionListener,
 				e1.printStackTrace();
 			}
 		}
+		if (e.getActionCommand() == ACTION_ADD_TIMESHEET) {
+			try {
+				Timesheet timesheet = new Timesheet("NULL","0","empty","0");
+				Database.Timesheets.addTimesheet(timesheet);
+
+				MyTableModel m = new MyTableModel(Database.Timesheets.getAll());
+
+				Integer index = m.getRowCount();
+				mainPage.getController().updateTables();
+
+				String neededID = (String) mainPage.getTimesheets().getModel()
+						.getValueAt(index - 1, 0);
+
+				TimesheetEditPage tm = new TimesheetEditPage(neededID.toString(),
+						mainPage, true);
+				tm.setVisible(true);
+			} catch (SQLException e1) {
+				e1.printStackTrace();
+			}
+		}
 		if (e.getActionCommand() == ACTION_EDIT) {
 			
 			switch (getSelectedTab()) {
@@ -123,6 +148,13 @@ public class MainPageController implements ActionListener,
 				PointEditPage pt = new PointEditPage(ptsModel, mainPage, false);
 				pt.setVisible(true);
 				break;
+			case NAME_TIMESHEETS:
+				String tsModel = new MyTableModel(Database.Timesheets.getAll())
+						.getValueAt(mainPage.getPoints().getSelectedRow(), 0)
+						.toString();
+				TimesheetEditPage ts = new TimesheetEditPage(tsModel, mainPage, false);
+				ts.setVisible(true);
+				break;
 			}
 			System.out.println();
 		}
@@ -130,13 +162,7 @@ public class MainPageController implements ActionListener,
 
 	@Override
 	public void valueChanged(ListSelectionEvent arg0) {
-//		if (!arg0.getValueIsAdjusting()) { // Preventing a double event firing
-//			String a = new MyTableModel(Database.Employees.getAll())
-//					.getValueAt(mainPage.getEmployees().getSelectedRow(), 0)
-//					.toString();
-//			EmployeeEditPage e = new EmployeeEditPage(a, mainPage, false);
-//			e.setVisible(true);
-//		}
+		
 	}
 
 }
