@@ -150,7 +150,7 @@ public class MainPageController implements ActionListener,
 				break;
 			case NAME_TIMESHEETS:
 				String tsModel = new MyTableModel(Database.Timesheets.getAll())
-						.getValueAt(mainPage.getPoints().getSelectedRow(), 0)
+						.getValueAt(mainPage.getTimesheets().getSelectedRow(), 0)
 						.toString();
 				TimesheetEditPage ts = new TimesheetEditPage(tsModel, mainPage, false);
 				ts.setVisible(true);
