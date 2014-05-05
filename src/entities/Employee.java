@@ -1,6 +1,6 @@
 package entities;
 
-public class Employee implements IEntity {
+public class Employee extends Entity {
 
 	private String employeeID;
 	private String passport;
@@ -16,6 +16,10 @@ public class Employee implements IEntity {
 		this.name = name;
 		this.profession = profession;
 		this.pointID = pointID;
+	}
+	
+	public Employee(){
+		this("NULL", "0", "empty", "empty", "0");
 	}
 
 	public String getEmployeeID() {

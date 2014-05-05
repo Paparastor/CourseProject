@@ -20,7 +20,7 @@ public class PointEditController implements ActionListener {
 		this.page = page;
 
 		try {
-			point = Database.Points.getPoint(page.getPointID());
+			point = (Point)Database.getPoints().getRow(page.getPointID());
 		} catch (NumberFormatException e) {
 			System.out.println("Error: something with numbers...");
 		} catch (SQLException e) {
@@ -42,7 +42,7 @@ public class PointEditController implements ActionListener {
 					page.getSalaryTextField().getText(),
 					page.getPostTextField().getText());
 			try {
-				Database.Points.editPoint(point.getPointID(),
+				Database.getPoints().editRow(point.getPointID(),
 						newPoint);
 				MainPage m = page.getMainPage();
 				MainPageController c = m.getController();
@@ -58,11 +58,11 @@ public class PointEditController implements ActionListener {
 
 		} else if (e.getActionCommand() == "Close") {
 			if (page.getMode()) {
-				MyTableModel m = new MyTableModel(Database.Points.getAll());
+				MyTableModel m = new MyTableModel(Database.getPoints().getAll());
 				Integer index = m.getRowCount();
 				String neededID = (String) m.getValueAt(index - 1, 0);
 				try {
-					Database.Points.deletePoint(neededID);
+					Database.getPoints().deleteRow(neededID);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

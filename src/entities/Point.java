@@ -1,6 +1,6 @@
 package entities;
 
-public class Point implements IEntity {
+public class Point extends Entity {
 	
 	private String pointID;
 	private String salary;
@@ -11,6 +11,10 @@ public class Point implements IEntity {
 		this.pointID = pointID;
 		this.salary = salary;
 		this.post = post;
+	}
+	
+	public Point(){
+		this("NULL", "0", "empty");
 	}
 
 	public String getPointID() {

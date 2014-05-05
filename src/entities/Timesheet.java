@@ -1,6 +1,6 @@
 package entities;
 
-public class Timesheet implements IEntity {
+public class Timesheet extends Entity {
 	
 	private String timesheetID;
 	private String employeeID;
@@ -14,6 +14,10 @@ public class Timesheet implements IEntity {
 		this.employeeID = employeeID;
 		this.date = date;
 		this.planPercentage = planPercentage;
+	}
+	
+	public Timesheet(){
+		this("NULL","0","empty","0");
 	}
 
 	public String getTimesheetID() {

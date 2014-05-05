@@ -20,7 +20,7 @@ public class EmployeeEditController implements ActionListener {
 		this.page = page;
 
 		try {
-			employee = Database.Employees.getEmployee(page.getEmployeeID());
+			employee = (Employee)Database.getEmployees().getRow(page.getEmployeeID());
 		} catch (NumberFormatException e) {
 			System.out.println("Error: something with numbers...");
 		} catch (SQLException e) {
@@ -46,7 +46,7 @@ public class EmployeeEditController implements ActionListener {
 							.getProfessionTextField().getText(), page
 							.getPointIDTextField().getText());
 			try {
-				Database.Employees.editEmployee(employee.getEmployeeID(),
+				Database.getEmployees().editRow(employee.getEmployeeID(),
 						newEmployee);
 				MainPage m = page.getMainPage();
 				MainPageController c = m.getController();
@@ -61,11 +61,11 @@ public class EmployeeEditController implements ActionListener {
 			
 		} else if (e.getActionCommand() == "Close") {
 			if (page.getMode()){
-				MyTableModel m = new MyTableModel(Database.Employees.getAll());
+				MyTableModel m = new MyTableModel(Database.getEmployees().getAll());
 				Integer index = m.getRowCount();
 				String neededID =  (String) m.getValueAt(index-1,0);
 				try {
-					Database.Employees.deleteEmployee(neededID);
+					Database.getEmployees().deleteRow(neededID);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

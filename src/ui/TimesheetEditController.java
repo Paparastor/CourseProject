@@ -20,7 +20,7 @@ public class TimesheetEditController implements ActionListener  {
 		this.page = page;
 
 		try {
-			timesheet = Database.Timesheets.getTimesheet(page.getTimesheetID());
+			timesheet = (Timesheet)Database.getTimesheets().getRow(page.getTimesheetID());
 		} catch (NumberFormatException e) {
 			System.out.println("Error: something with numbers...");
 		} catch (SQLException e) {
@@ -41,7 +41,7 @@ public class TimesheetEditController implements ActionListener  {
 			Timesheet newTimesheet = new Timesheet(page.getTimesheetIDField().getText(),page.getEmployeeIDField().getText(),page.getDateField().getText(),
 					page.getPlanField().getText());
 			try {
-				Database.Timesheets.editTimesheet(timesheet.getTimesheetID(), newTimesheet);
+				Database.getTimesheets().editRow(timesheet.getTimesheetID(), newTimesheet);
 				MainPage m = page.getMainPage();
 				MainPageController c = m.getController();
 				try {
@@ -57,11 +57,11 @@ public class TimesheetEditController implements ActionListener  {
 
 		} else if (e.getActionCommand() == "Close") {
 			if (page.getMode()) {
-				MyTableModel m = new MyTableModel(Database.Timesheets.getAll());
+				MyTableModel m = new MyTableModel(Database.getTimesheets().getAll());
 				Integer index = m.getRowCount();
 				String neededID = (String) m.getValueAt(index - 1, 0);
 				try {
-					Database.Timesheets.deleteTimesheet(neededID);
+					Database.getTimesheets().deleteRow(neededID);
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}

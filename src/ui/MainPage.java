@@ -137,7 +137,7 @@ public class MainPage extends JFrame {
 		employees = new JTable();
 		employees.setName(MainPageController.NAME_EMPLOYEES);
 		employees.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		employees.getSelectionModel().addListSelectionListener(controller);
+		//employees.getSelectionModel().addListSelectionListener(controller);
 
 		points = new JTable();
 		points.setName(MainPageController.NAME_POINTS);
