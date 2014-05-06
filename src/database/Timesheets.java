@@ -7,6 +7,9 @@ import entities.Entity;
 import entities.Timesheet;
 
 public class Timesheets extends DBTable {
+	
+	public static final String ORDER_BY_DATE = "Order by date";
+	public static final String ORDER_BY_PLAN = "Order by plan";
 
 	public Timesheets(String creationQuery, String name) {
 		super(creationQuery, name);
@@ -48,6 +51,19 @@ public class Timesheets extends DBTable {
 				resultSet.getString("DATE"),
 				resultSet.getString("PLAN_PERCENTAGE"));
 		return timesheet;
+	}
+
+	@Override
+	public ResultSet getAllFormatted(String orderField) {
+		switch (orderField) {
+		case ORDER_BY_DATE:
+			return Database.getResultSet("select * from " + super.getName() +" order by NAME;");
+		case ORDER_BY_PLAN:
+			return Database.getResultSet("select * from employees order by POINT_ID;");
+		case ORDER_BY_ID:
+			return Database.getTimesheets().getAll();
+		}
+		return null;
 	}
 
 }

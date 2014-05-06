@@ -3,6 +3,10 @@ package ui;
 import java.awt.*;
 import javax.swing.*;
 
+import database.Employees;
+import database.Points;
+import database.Timesheets;
+
 public class MainPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
@@ -22,11 +26,29 @@ public class MainPage extends JFrame {
 	private JTable points;
 	private JTable timesheets;
 	private JTabbedPane tablePane;
-	
+
 	// Menu items
 	private JMenuItem addEmployeeItem;
 	private JMenuItem addPointItem;
 	private JMenuItem addTimesheetItem;
+
+	// ComboBoxes
+	private JComboBox<String> employeesBox;
+	private JComboBox<String> pointsBox;
+	private JComboBox<String> timesheetsBox;
+	
+
+	public JComboBox<String> getEmployeesBox() {
+		return employeesBox;
+	}
+
+	public JComboBox<String> getPointsBox() {
+		return pointsBox;
+	}
+
+	public JComboBox<String> getTimesheetsBox() {
+		return timesheetsBox;
+	}
 
 	public JMenuItem getAddEmployeeItem() {
 		return addEmployeeItem;
@@ -55,8 +77,8 @@ public class MainPage extends JFrame {
 	public JTable getTimesheets() {
 		return timesheets;
 	}
-	
-	public JTabbedPane getTablePane(){
+
+	public JTabbedPane getTablePane() {
 		return tablePane;
 	}
 
@@ -69,7 +91,7 @@ public class MainPage extends JFrame {
 		this.setSize(WIDTH, HEIGHT);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setVisible(true);
-		
+
 		setLayout(new BoxLayout(this.getContentPane(), BoxLayout.Y_AXIS));
 
 		// Menu bar creation
@@ -113,28 +135,28 @@ public class MainPage extends JFrame {
 		menuPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
 		menuPanel.add(menuBar);
 		this.add(menuPanel);
-		
+
 		// Buttons panel
 		JPanel buttonPanel = new JPanel();
 		buttonPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-		
+
 		JButton addButton = new JButton("Add");
 		addButton.setActionCommand(MainPageController.ACTION_ADD);
 		addButton.addActionListener(controller);
 		buttonPanel.add(addButton);
-		
+
 		JButton editButton = new JButton("Edit");
 		editButton.setActionCommand(MainPageController.ACTION_EDIT);
 		editButton.addActionListener(controller);
 		buttonPanel.add(editButton);
-		
+
 		JButton deleteButton = new JButton("Delete");
 		deleteButton.setActionCommand(MainPageController.ACTION_DELETE);
 		deleteButton.addActionListener(controller);
 		buttonPanel.add(deleteButton);
-		
+
 		this.add(buttonPanel);
-		
+
 		// Table creation
 		employees = new JTable();
 		employees.setName(MainPageController.NAME_EMPLOYEES);
@@ -147,13 +169,45 @@ public class MainPage extends JFrame {
 		timesheets = new JTable();
 		timesheets.setName(MainPageController.NAME_TIMESHEETS);
 		timesheets.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		
+
 		controller.updateTables();
 
 		tablePane = new JTabbedPane();
-		tablePane.add("Employees", new JScrollPane(employees));
-		tablePane.add("Points", new JScrollPane(points));
-		tablePane.add("Timesheets", new JScrollPane(timesheets));
+
+		// 'Employees' comboBox
+		JPanel e = new JPanel();
+		e.setLayout(new BoxLayout(e, BoxLayout.Y_AXIS));
+		employeesBox = new JComboBox<String>(new String[] {
+				Employees.ORDER_BY_ID, Employees.ORDER_BY_NAME,
+				Employees.ORDER_BY_POINT });
+		employeesBox.setActionCommand(MainPageController.SORT_EMPLOYEES);
+		employeesBox.addActionListener(controller);
+		e.add(employeesBox);
+		e.add(new JScrollPane(employees));
+
+		// 'Points' comboBox
+		JPanel p = new JPanel();
+		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
+		pointsBox = new JComboBox<String>(new String[] { Points.ORDER_BY_ID,
+				Points.ORDER_BY_SALARY_ASC, Points.ORDER_BY_SALARY_DESC });
+		pointsBox.setActionCommand(MainPageController.SORT_POINTS);
+		pointsBox.addActionListener(controller);
+		p.add(pointsBox);
+		p.add(new JScrollPane(points));
+
+		// 'Timesheets' comboBox
+		JPanel t = new JPanel();
+		t.setLayout(new BoxLayout(t, BoxLayout.Y_AXIS));
+		timesheetsBox = new JComboBox<String>(new String[] {
+				Timesheets.ORDER_BY_ID, Timesheets.ORDER_BY_DATE, Timesheets.ORDER_BY_PLAN});
+		timesheetsBox.setActionCommand(MainPageController.SORT_TIMESHEETS);
+		timesheetsBox.addActionListener(controller);
+		t.add(timesheetsBox);
+		t.add(new JScrollPane(timesheets));
+
+		tablePane.add("Employees", e);
+		tablePane.add("Points", p);
+		tablePane.add("Timesheets", t);
 		this.add(tablePane);
 
 	}

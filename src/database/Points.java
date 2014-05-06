@@ -7,6 +7,9 @@ import entities.Entity;
 import entities.Point;
 
 public class Points extends DBTable {
+	
+	public static final String ORDER_BY_SALARY_ASC = "Order by salary (ascend)";
+	public static final String ORDER_BY_SALARY_DESC = "Order by salary (descend)";
 
 	public Points(String creationQuery, String name) {
 		super(creationQuery, name);
@@ -42,6 +45,19 @@ public class Points extends DBTable {
 		point = new Point(resultSet.getString("POINT_ID"),
 				resultSet.getString("SALARY"), resultSet.getString("POST"));
 		return point;
+	}
+
+	@Override
+	public ResultSet getAllFormatted(String orderField) {
+		switch (orderField) {
+		case ORDER_BY_SALARY_ASC:
+			return Database.getResultSet("select * from " + super.getName() +" order by SALARY asc;");
+		case ORDER_BY_SALARY_DESC:
+			return Database.getResultSet("select * from " + super.getName() +" order by SALARY desc;");
+		case ORDER_BY_ID:
+			return Database.getPoints().getAll();
+		}
+		return null;
 	}
 
 }

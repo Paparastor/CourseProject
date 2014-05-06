@@ -6,9 +6,15 @@ import entities.Entity;
 
 public abstract class DBTable {
 	
+	public static final String ORDER_BY_ID = "Order by ID";
+	
 	private static String SQL_SPECS;
 	
 	private String name;
+	
+	protected String getName(){
+		return name;
+	}
 	
 	public DBTable(String creationQuery, String name){
 		SQL_SPECS = creationQuery;
@@ -45,5 +51,7 @@ public abstract class DBTable {
 
 	// Getting an entity
 	public abstract Entity getRow(String id) throws SQLException;
+
+	public abstract ResultSet getAllFormatted(String orderField);
 
 }

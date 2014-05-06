@@ -19,6 +19,10 @@ public class MainPageController implements ActionListener {
 	public final static String NAME_POINTS = "points";
 	public final static String NAME_TIMESHEETS = "timesheets";
 
+	public final static String SORT_EMPLOYEES = "employees sorting";
+	public final static String SORT_POINTS = "points sorting";
+	public final static String SORT_TIMESHEETS = "timesheets sorting";
+
 	public final static String ACTION_ADD = "ADD";
 	public final static String ACTION_DELETE = "DELETE";
 
@@ -160,9 +164,9 @@ public class MainPageController implements ActionListener {
 
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
-				String emp = new MyTableModel(Database.getEmployees()
-						.getAll()).getValueAt(
-						mainPage.getEmployees().getSelectedRow(), 0).toString();
+				String emp = new MyTableModel(Database.getEmployees().getAll())
+						.getValueAt(mainPage.getEmployees().getSelectedRow(), 0)
+						.toString();
 				try {
 					Database.getEmployees().deleteRow(emp);
 				} catch (SQLException e1) {
@@ -170,9 +174,9 @@ public class MainPageController implements ActionListener {
 				}
 				break;
 			case NAME_POINTS:
-				String pts = new MyTableModel(Database.getPoints()
-						.getAll()).getValueAt(
-						mainPage.getPoints().getSelectedRow(), 0).toString();
+				String pts = new MyTableModel(Database.getPoints().getAll())
+						.getValueAt(mainPage.getPoints().getSelectedRow(), 0)
+						.toString();
 				try {
 					Database.getPoints().deleteRow(pts);
 				} catch (SQLException e1) {
@@ -180,10 +184,9 @@ public class MainPageController implements ActionListener {
 				}
 				break;
 			case NAME_TIMESHEETS:
-				String ts = new MyTableModel(Database.getTimesheets()
-						.getAll()).getValueAt(
-						mainPage.getTimesheets().getSelectedRow(), 0)
-						.toString();
+				String ts = new MyTableModel(Database.getTimesheets().getAll())
+						.getValueAt(mainPage.getTimesheets().getSelectedRow(),
+								0).toString();
 				try {
 					Database.getTimesheets().deleteRow(ts);
 				} catch (SQLException e1) {
@@ -193,6 +196,17 @@ public class MainPageController implements ActionListener {
 			}
 			updateTables();
 		}
+		if (e.getActionCommand() == SORT_EMPLOYEES) {
+			mainPage.getEmployees().setModel(
+					new MyTableModel(Database.getEmployees().getAllFormatted(
+							mainPage.getEmployeesBox().getSelectedItem()
+									.toString())));
+		}
+		if (e.getActionCommand() == SORT_POINTS) {
+			mainPage.getPoints().setModel(
+					new MyTableModel(Database.getPoints().getAllFormatted(
+							mainPage.getPointsBox().getSelectedItem()
+									.toString())));
+		}
 	}
-
 }
