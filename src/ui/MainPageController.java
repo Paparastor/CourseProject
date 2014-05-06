@@ -5,8 +5,6 @@ import java.awt.event.ActionListener;
 import java.sql.SQLException;
 
 import javax.swing.*;
-import javax.swing.event.ListSelectionEvent;
-import javax.swing.event.ListSelectionListener;
 
 import database.DBTable;
 import database.Database;
@@ -22,7 +20,8 @@ public class MainPageController implements ActionListener {
 	public final static String NAME_TIMESHEETS = "timesheets";
 
 	public final static String ACTION_ADD = "ADD";
-	
+	public final static String ACTION_DELETE = "DELETE";
+
 	public final static String ACTION_ADD_EMPLOYEE = "New Employee";
 	public final static String ACTION_ADD_POINT = "New Point";
 	public final static String ACTION_ADD_TIMESHEET = "New Timesheet";
@@ -47,16 +46,17 @@ public class MainPageController implements ActionListener {
 		mainPage.getTimesheets().setModel(
 				new MyTableModel(Database.getTimesheets().getAll()));
 	}
-	
-	private String getSelectedTab(){
+
+	private String getSelectedTab() {
 		JTabbedPane p = mainPage.getTablePane();
 		JScrollPane c = (JScrollPane) p.getSelectedComponent();
-		JViewport viewport = c.getViewport(); 
-		JTable myTable = (JTable)viewport.getView();
+		JViewport viewport = c.getViewport();
+		JTable myTable = (JTable) viewport.getView();
 		return myTable.getName();
 	}
-	
-	private String getNeededID(Entity entity, DBTable table) throws SQLException {
+
+	private String getNeededID(Entity entity, DBTable table)
+			throws SQLException {
 
 		table.addRow(entity);
 
@@ -65,22 +65,25 @@ public class MainPageController implements ActionListener {
 		Integer index = m.getRowCount();
 		mainPage.getController().updateTables();
 
-		String neededID = (String)m.getValueAt(index - 1, 0);
+		String neededID = (String) m.getValueAt(index - 1, 0);
 		return neededID;
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == ACTION_ADD) {
-			switch(getSelectedTab()){
+			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
-				this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,ACTION_ADD_EMPLOYEE));
+				this.actionPerformed(new ActionEvent(this,
+						ActionEvent.ACTION_PERFORMED, ACTION_ADD_EMPLOYEE));
 				break;
 			case NAME_POINTS:
-				this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,ACTION_ADD_POINT));
+				this.actionPerformed(new ActionEvent(this,
+						ActionEvent.ACTION_PERFORMED, ACTION_ADD_POINT));
 				break;
 			case NAME_TIMESHEETS:
-				this.actionPerformed(new ActionEvent(this,ActionEvent.ACTION_PERFORMED,ACTION_ADD_TIMESHEET));
+				this.actionPerformed(new ActionEvent(this,
+						ActionEvent.ACTION_PERFORMED, ACTION_ADD_TIMESHEET));
 				break;
 			}
 		}
@@ -90,8 +93,8 @@ public class MainPageController implements ActionListener {
 				Database.getEmployees().addRow(employee);
 				DBTable table = Database.getEmployees();
 
-				EmployeeEditPage emp = new EmployeeEditPage(
-						getNeededID(employee,table), mainPage, true);
+				EmployeeEditPage emp = new EmployeeEditPage(getNeededID(
+						employee, table), mainPage, true);
 				emp.setVisible(true);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
@@ -102,9 +105,9 @@ public class MainPageController implements ActionListener {
 				Point point = new Point();
 				Database.getPoints().addRow(point);
 				DBTable table = Database.getPoints();
-				
+
 				PointEditPage emp = new PointEditPage(
-						getNeededID(point,table), mainPage, true);
+						getNeededID(point, table), mainPage, true);
 				emp.setVisible(true);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
@@ -116,39 +119,79 @@ public class MainPageController implements ActionListener {
 				Database.getTimesheets().addRow(timesheet);
 				DBTable table = Database.getTimesheets();
 
-				TimesheetEditPage tm = new TimesheetEditPage(
-						getNeededID(timesheet,table), mainPage, true);
+				TimesheetEditPage tm = new TimesheetEditPage(getNeededID(
+						timesheet, table), mainPage, true);
 				tm.setVisible(true);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
 			}
 		}
 		if (e.getActionCommand() == ACTION_EDIT) {
-			
+
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
-				String empModel = new MyTableModel(Database.getEmployees().getAll())
-						.getValueAt(mainPage.getEmployees().getSelectedRow(), 0)
-						.toString();
-				EmployeeEditPage em = new EmployeeEditPage(empModel, mainPage, false);
+				String empModel = new MyTableModel(Database.getEmployees()
+						.getAll()).getValueAt(
+						mainPage.getEmployees().getSelectedRow(), 0).toString();
+				EmployeeEditPage em = new EmployeeEditPage(empModel, mainPage,
+						false);
 				em.setVisible(true);
 				break;
 			case NAME_POINTS:
-				String ptsModel = new MyTableModel(Database.getPoints().getAll())
-						.getValueAt(mainPage.getPoints().getSelectedRow(), 0)
-						.toString();
+				String ptsModel = new MyTableModel(Database.getPoints()
+						.getAll()).getValueAt(
+						mainPage.getPoints().getSelectedRow(), 0).toString();
 				PointEditPage pt = new PointEditPage(ptsModel, mainPage, false);
 				pt.setVisible(true);
 				break;
 			case NAME_TIMESHEETS:
-				String tsModel = new MyTableModel(Database.getTimesheets().getAll())
-						.getValueAt(mainPage.getTimesheets().getSelectedRow(), 0)
+				String tsModel = new MyTableModel(Database.getTimesheets()
+						.getAll()).getValueAt(
+						mainPage.getTimesheets().getSelectedRow(), 0)
 						.toString();
-				TimesheetEditPage ts = new TimesheetEditPage(tsModel, mainPage, false);
+				TimesheetEditPage ts = new TimesheetEditPage(tsModel, mainPage,
+						false);
 				ts.setVisible(true);
 				break;
 			}
 			System.out.println();
+		}
+		if (e.getActionCommand() == ACTION_DELETE) {
+
+			switch (getSelectedTab()) {
+			case NAME_EMPLOYEES:
+				String emp = new MyTableModel(Database.getEmployees()
+						.getAll()).getValueAt(
+						mainPage.getEmployees().getSelectedRow(), 0).toString();
+				try {
+					Database.getEmployees().deleteRow(emp);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				break;
+			case NAME_POINTS:
+				String pts = new MyTableModel(Database.getPoints()
+						.getAll()).getValueAt(
+						mainPage.getPoints().getSelectedRow(), 0).toString();
+				try {
+					Database.getPoints().deleteRow(pts);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				break;
+			case NAME_TIMESHEETS:
+				String ts = new MyTableModel(Database.getTimesheets()
+						.getAll()).getValueAt(
+						mainPage.getTimesheets().getSelectedRow(), 0)
+						.toString();
+				try {
+					Database.getTimesheets().deleteRow(ts);
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				break;
+			}
+			updateTables();
 		}
 	}
 

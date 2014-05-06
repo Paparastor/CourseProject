@@ -129,6 +129,8 @@ public class MainPage extends JFrame {
 		buttonPanel.add(editButton);
 		
 		JButton deleteButton = new JButton("Delete");
+		deleteButton.setActionCommand(MainPageController.ACTION_DELETE);
+		deleteButton.addActionListener(controller);
 		buttonPanel.add(deleteButton);
 		
 		this.add(buttonPanel);
@@ -137,7 +139,6 @@ public class MainPage extends JFrame {
 		employees = new JTable();
 		employees.setName(MainPageController.NAME_EMPLOYEES);
 		employees.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		//employees.getSelectionModel().addListSelectionListener(controller);
 
 		points = new JTable();
 		points.setName(MainPageController.NAME_POINTS);
