@@ -53,7 +53,8 @@ public class MainPageController implements ActionListener {
 
 	private String getSelectedTab() {
 		JTabbedPane p = mainPage.getTablePane();
-		JScrollPane c = (JScrollPane) p.getSelectedComponent();
+		JPanel pan = (JPanel) p.getSelectedComponent();
+		JScrollPane c = (JScrollPane) pan.getComponent(1);
 		JViewport viewport = c.getViewport();
 		JTable myTable = (JTable) viewport.getView();
 		return myTable.getName();
@@ -61,8 +62,6 @@ public class MainPageController implements ActionListener {
 
 	private String getNeededID(Entity entity, DBTable table)
 			throws SQLException {
-
-		table.addRow(entity);
 
 		MyTableModel m = new MyTableModel(table.getAll());
 
@@ -91,7 +90,7 @@ public class MainPageController implements ActionListener {
 				break;
 			}
 		}
-		if (e.getActionCommand() == ACTION_ADD_EMPLOYEE) {
+		else if (e.getActionCommand() == ACTION_ADD_EMPLOYEE) {
 			try {
 				Employee employee = new Employee();
 				Database.getEmployees().addRow(employee);
@@ -104,7 +103,7 @@ public class MainPageController implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
-		if (e.getActionCommand() == ACTION_ADD_POINT) {
+		else if (e.getActionCommand() == ACTION_ADD_POINT) {
 			try {
 				Point point = new Point();
 				Database.getPoints().addRow(point);
@@ -117,7 +116,7 @@ public class MainPageController implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
-		if (e.getActionCommand() == ACTION_ADD_TIMESHEET) {
+		else if (e.getActionCommand() == ACTION_ADD_TIMESHEET) {
 			try {
 				Timesheet timesheet = new Timesheet();
 				Database.getTimesheets().addRow(timesheet);
@@ -130,7 +129,7 @@ public class MainPageController implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
-		if (e.getActionCommand() == ACTION_EDIT) {
+		else if (e.getActionCommand() == ACTION_EDIT) {
 
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
@@ -160,7 +159,7 @@ public class MainPageController implements ActionListener {
 			}
 			System.out.println();
 		}
-		if (e.getActionCommand() == ACTION_DELETE) {
+		else if (e.getActionCommand() == ACTION_DELETE) {
 
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
@@ -196,19 +195,19 @@ public class MainPageController implements ActionListener {
 			}
 			updateTables();
 		}
-		if (e.getActionCommand() == SORT_EMPLOYEES) {
+		else if (e.getActionCommand() == SORT_EMPLOYEES) {
 			mainPage.getEmployees().setModel(
 					new MyTableModel(Database.getEmployees().getAllFormatted(
 							mainPage.getEmployeesBox().getSelectedItem()
 									.toString())));
 		}
-		if (e.getActionCommand() == SORT_POINTS) {
+		else if (e.getActionCommand() == SORT_POINTS) {
 			mainPage.getPoints().setModel(
 					new MyTableModel(Database.getPoints().getAllFormatted(
 							mainPage.getPointsBox().getSelectedItem()
 									.toString())));
 		}
-		if (e.getActionCommand() == SORT_TIMESHEETS) {
+		else if (e.getActionCommand() == SORT_TIMESHEETS) {
 			mainPage.getTimesheets().setModel(
 					new MyTableModel(Database.getTimesheets().getAllFormatted(
 							mainPage.getTimesheetsBox().getSelectedItem()

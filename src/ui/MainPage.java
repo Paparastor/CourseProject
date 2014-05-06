@@ -98,12 +98,13 @@ public class MainPage extends JFrame {
 		menuBar = new JMenuBar();
 
 		// 'File' item creation
-		JMenu file = new JMenu("File");
-		menuBar.add(file);
+		//JMenu file = new JMenu("File");
+		//menuBar.add(file);
 
 		// 'Edit' item creation
-		JMenu edit = new JMenu("Edit");
+		JMenu edit = new JMenu("Entity");
 		JMenu addMenu = new JMenu("Add...");
+		JMenu findMenu = new JMenu("Find...");
 
 		addEmployeeItem = new JMenuItem(MainPageController.ACTION_ADD_EMPLOYEE);
 		addEmployeeItem.addActionListener(controller);
@@ -117,15 +118,12 @@ public class MainPage extends JFrame {
 		addMenu.add(addTimesheetItem);
 
 		edit.add(addMenu);
+		edit.add(findMenu);
 		menuBar.add(edit);
 
 		// 'Query' item creation
 		JMenu query = new JMenu("Query");
 		menuBar.add(query);
-
-		// 'Format' item creation
-		JMenu format = new JMenu("Format");
-		menuBar.add(format);
 
 		// 'Help' item creation
 		JMenu help = new JMenu("Help");

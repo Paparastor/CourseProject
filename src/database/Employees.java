@@ -9,6 +9,8 @@ public class Employees extends DBTable {
 
 	public static final String ORDER_BY_NAME = "Order by names";
 	public static final String ORDER_BY_POINT = "Order by points";
+	
+	public static final String FILTER_BY_ = "Order by points";
 
 	public Employees(String creationQuery, String name) {
 		super(creationQuery, name);
