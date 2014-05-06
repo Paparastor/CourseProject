@@ -57,9 +57,9 @@ public class Timesheets extends DBTable {
 	public ResultSet getAllFormatted(String orderField) {
 		switch (orderField) {
 		case ORDER_BY_DATE:
-			return Database.getResultSet("select * from " + super.getName() +" order by NAME;");
+			return Database.getResultSet("select * from " + super.getName() +" order by DATE;");
 		case ORDER_BY_PLAN:
-			return Database.getResultSet("select * from employees order by POINT_ID;");
+			return Database.getResultSet("select * from timesheets order by PLAN_PERCENTAGE;");
 		case ORDER_BY_ID:
 			return Database.getTimesheets().getAll();
 		}

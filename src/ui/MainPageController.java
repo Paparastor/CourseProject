@@ -208,5 +208,12 @@ public class MainPageController implements ActionListener {
 							mainPage.getPointsBox().getSelectedItem()
 									.toString())));
 		}
+		if (e.getActionCommand() == SORT_TIMESHEETS) {
+			mainPage.getTimesheets().setModel(
+					new MyTableModel(Database.getTimesheets().getAllFormatted(
+							mainPage.getTimesheetsBox().getSelectedItem()
+									.toString())));
+		}
+		
 	}
 }
