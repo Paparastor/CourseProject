@@ -6,9 +6,6 @@ import java.sql.SQLException;
 import entities.*;
 
 public class Employees extends DBTable {
-
-	public static final String ORDER_BY_NAME = "Order by names";
-	public static final String ORDER_BY_POINT = "Order by points";
 	
 	public static final String FILTER_BY_ = "Order by points";
 
@@ -25,19 +22,6 @@ public class Employees extends DBTable {
 				+ employee.getName() + "\"" + "," + "\""
 				+ employee.getProfession() + "\"" + "," + employee.getPointID()
 				+ ");");
-	}
-
-	@Override
-	public ResultSet getAllFormatted(String orderField) {
-		switch (orderField) {
-		case ORDER_BY_NAME:
-			return Database.getResultSet("select * from " + super.getName() +" order by NAME;");
-		case ORDER_BY_POINT:
-			return Database.getResultSet("select * from employees order by POINT_ID;");
-		case ORDER_BY_ID:
-			return Database.getEmployees().getAll();
-		}
-		return null;
 	}
 
 	@Override

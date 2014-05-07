@@ -2,6 +2,8 @@ package ui;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 import java.sql.SQLException;
 
 import javax.swing.*;
@@ -13,25 +15,29 @@ import entities.Entity;
 import entities.Point;
 import entities.Timesheet;
 
-public class MainPageController implements ActionListener {
+public class MainPageController extends MouseAdapter implements ActionListener {
 
+	// Tables names
 	public final static String NAME_EMPLOYEES = "employees";
 	public final static String NAME_POINTS = "points";
 	public final static String NAME_TIMESHEETS = "timesheets";
 
+	// Sorting actions for a different tables
 	public final static String SORT_EMPLOYEES = "employees sorting";
 	public final static String SORT_POINTS = "points sorting";
 	public final static String SORT_TIMESHEETS = "timesheets sorting";
 
+	// General actions
 	public final static String ACTION_ADD = "ADD";
 	public final static String ACTION_DELETE = "DELETE";
+	public final static String ACTION_EDIT = "EDIT";
 
+	// Specific actions for a different tables
 	public final static String ACTION_ADD_EMPLOYEE = "New Employee";
 	public final static String ACTION_ADD_POINT = "New Point";
 	public final static String ACTION_ADD_TIMESHEET = "New Timesheet";
 
-	public final static String ACTION_EDIT = "Edit";
-
+	// Reference to a main page
 	private MainPage mainPage;
 
 	public MainPageController(MainPage mainPage) {
@@ -42,6 +48,7 @@ public class MainPageController implements ActionListener {
 		Database.initializeDatabase();
 	}
 
+	// Updating all the tables
 	public void updateTables() {
 		mainPage.getEmployees().setModel(
 				new MyTableModel(Database.getEmployees().getAll()));
@@ -51,15 +58,17 @@ public class MainPageController implements ActionListener {
 				new MyTableModel(Database.getTimesheets().getAll()));
 	}
 
+	// Getting currently selected tab
 	private String getSelectedTab() {
 		JTabbedPane p = mainPage.getTablePane();
 		JPanel pan = (JPanel) p.getSelectedComponent();
-		JScrollPane c = (JScrollPane) pan.getComponent(1);
+		JScrollPane c = (JScrollPane) pan.getComponent(0);
 		JViewport viewport = c.getViewport();
 		JTable myTable = (JTable) viewport.getView();
 		return myTable.getName();
 	}
 
+	// Getting entities index
 	private String getNeededID(Entity entity, DBTable table)
 			throws SQLException {
 
@@ -73,7 +82,36 @@ public class MainPageController implements ActionListener {
 	}
 
 	@Override
+	public void mouseClicked(MouseEvent e) {
+		JTable table;
+		DBTable dbTable;
+		switch (getSelectedTab()) {
+		case NAME_EMPLOYEES:
+			table = mainPage.getEmployees();
+			dbTable = Database.getEmployees();
+			break;
+		case NAME_POINTS:
+			table = mainPage.getPoints();
+			dbTable = Database.getPoints();
+			break;
+		case NAME_TIMESHEETS:
+			table = mainPage.getTimesheets();
+			dbTable = Database.getTimesheets();
+			break;
+		default:
+			table = null;
+			dbTable = null;
+			break;
+		}
+		int col = table.columnAtPoint(e.getPoint());
+		String name = table.getColumnName(col);
+		System.out.println("Column index selected " + col + " " + name);
+		table.setModel(new MyTableModel(dbTable.getAll(name)));
+	}
+
+	@Override
 	public void actionPerformed(ActionEvent e) {
+		// General addition action
 		if (e.getActionCommand() == ACTION_ADD) {
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
@@ -90,6 +128,7 @@ public class MainPageController implements ActionListener {
 				break;
 			}
 		}
+		// Specific addition action for 'employees'
 		else if (e.getActionCommand() == ACTION_ADD_EMPLOYEE) {
 			try {
 				Employee employee = new Employee();
@@ -103,6 +142,7 @@ public class MainPageController implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
+		// Specific addition action for 'points'
 		else if (e.getActionCommand() == ACTION_ADD_POINT) {
 			try {
 				Point point = new Point();
@@ -116,6 +156,7 @@ public class MainPageController implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
+		// Specific addition action for 'timesheets'
 		else if (e.getActionCommand() == ACTION_ADD_TIMESHEET) {
 			try {
 				Timesheet timesheet = new Timesheet();
@@ -129,8 +170,9 @@ public class MainPageController implements ActionListener {
 				e1.printStackTrace();
 			}
 		}
+		// General action for editing
 		else if (e.getActionCommand() == ACTION_EDIT) {
-
+			// Editing specification
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
 				String empModel = new MyTableModel(Database.getEmployees()
@@ -159,8 +201,9 @@ public class MainPageController implements ActionListener {
 			}
 			System.out.println();
 		}
+		// General delete action
 		else if (e.getActionCommand() == ACTION_DELETE) {
-
+			// Deletion specification
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
 				String emp = new MyTableModel(Database.getEmployees().getAll())
@@ -195,24 +238,5 @@ public class MainPageController implements ActionListener {
 			}
 			updateTables();
 		}
-		else if (e.getActionCommand() == SORT_EMPLOYEES) {
-			mainPage.getEmployees().setModel(
-					new MyTableModel(Database.getEmployees().getAllFormatted(
-							mainPage.getEmployeesBox().getSelectedItem()
-									.toString())));
-		}
-		else if (e.getActionCommand() == SORT_POINTS) {
-			mainPage.getPoints().setModel(
-					new MyTableModel(Database.getPoints().getAllFormatted(
-							mainPage.getPointsBox().getSelectedItem()
-									.toString())));
-		}
-		else if (e.getActionCommand() == SORT_TIMESHEETS) {
-			mainPage.getTimesheets().setModel(
-					new MyTableModel(Database.getTimesheets().getAllFormatted(
-							mainPage.getTimesheetsBox().getSelectedItem()
-									.toString())));
-		}
-		
 	}
 }

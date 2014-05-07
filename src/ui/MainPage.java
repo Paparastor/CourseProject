@@ -30,25 +30,7 @@ public class MainPage extends JFrame {
 	// Menu items
 	private JMenuItem addEmployeeItem;
 	private JMenuItem addPointItem;
-	private JMenuItem addTimesheetItem;
-
-	// ComboBoxes
-	private JComboBox<String> employeesBox;
-	private JComboBox<String> pointsBox;
-	private JComboBox<String> timesheetsBox;
-	
-
-	public JComboBox<String> getEmployeesBox() {
-		return employeesBox;
-	}
-
-	public JComboBox<String> getPointsBox() {
-		return pointsBox;
-	}
-
-	public JComboBox<String> getTimesheetsBox() {
-		return timesheetsBox;
-	}
+	private JMenuItem addTimesheetItem;	
 
 	public JMenuItem getAddEmployeeItem() {
 		return addEmployeeItem;
@@ -159,14 +141,17 @@ public class MainPage extends JFrame {
 		employees = new JTable();
 		employees.setName(MainPageController.NAME_EMPLOYEES);
 		employees.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		employees.getTableHeader().addMouseListener(controller);
 
 		points = new JTable();
 		points.setName(MainPageController.NAME_POINTS);
 		points.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		points.getTableHeader().addMouseListener(controller);
 
 		timesheets = new JTable();
 		timesheets.setName(MainPageController.NAME_TIMESHEETS);
 		timesheets.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+		timesheets.getTableHeader().addMouseListener(controller);
 
 		controller.updateTables();
 
@@ -175,32 +160,16 @@ public class MainPage extends JFrame {
 		// 'Employees' comboBox
 		JPanel e = new JPanel();
 		e.setLayout(new BoxLayout(e, BoxLayout.Y_AXIS));
-		employeesBox = new JComboBox<String>(new String[] {
-				Employees.ORDER_BY_ID, Employees.ORDER_BY_NAME,
-				Employees.ORDER_BY_POINT });
-		employeesBox.setActionCommand(MainPageController.SORT_EMPLOYEES);
-		employeesBox.addActionListener(controller);
-		e.add(employeesBox);
 		e.add(new JScrollPane(employees));
 
 		// 'Points' comboBox
 		JPanel p = new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
-		pointsBox = new JComboBox<String>(new String[] { Points.ORDER_BY_ID,
-				Points.ORDER_BY_SALARY_ASC, Points.ORDER_BY_SALARY_DESC });
-		pointsBox.setActionCommand(MainPageController.SORT_POINTS);
-		pointsBox.addActionListener(controller);
-		p.add(pointsBox);
 		p.add(new JScrollPane(points));
 
 		// 'Timesheets' comboBox
 		JPanel t = new JPanel();
 		t.setLayout(new BoxLayout(t, BoxLayout.Y_AXIS));
-		timesheetsBox = new JComboBox<String>(new String[] {
-				Timesheets.ORDER_BY_ID, Timesheets.ORDER_BY_DATE, Timesheets.ORDER_BY_PLAN});
-		timesheetsBox.setActionCommand(MainPageController.SORT_TIMESHEETS);
-		timesheetsBox.addActionListener(controller);
-		t.add(timesheetsBox);
 		t.add(new JScrollPane(timesheets));
 
 		tablePane.add("Employees", e);

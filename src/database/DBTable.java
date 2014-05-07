@@ -5,20 +5,23 @@ import java.sql.SQLException;
 import entities.Entity;
 
 public abstract class DBTable {
-	
+
 	public static final String ORDER_BY_ID = "Order by ID";
-	
+
 	private static String SQL_SPECS;
-	
+
 	private String name;
-	
-	protected String getName(){
+
+	private boolean sortingFlag;
+
+	protected String getName() {
 		return name;
 	}
-	
-	public DBTable(String creationQuery, String name){
+
+	public DBTable(String creationQuery, String name) {
 		SQL_SPECS = creationQuery;
 		this.name = name;
+		sortingFlag = false;
 	}
 
 	public static String getCreationQuery() {
@@ -30,8 +33,22 @@ public abstract class DBTable {
 		return Database.getResultSet("select * from " + name + ";");
 	}
 
+	public ResultSet getAll(String sortingField) {
+		String sortingMode;
+		if (sortingFlag) {
+			sortingMode = " asc ";
+			sortingFlag = false;
+		} else {
+			sortingMode = " desc ";
+			sortingFlag = true;
+		}
+		return Database.getResultSet("select * from " + name + " order by "
+				+ sortingField + sortingMode + ";");
+	}
+
 	public int getRowsCount() {
-		ResultSet r = Database.getResultSet("select count(*) from " + name + ";");
+		ResultSet r = Database.getResultSet("select count(*) from " + name
+				+ ";");
 		try {
 			return r.getInt(0);
 		} catch (SQLException e) {
@@ -44,14 +61,13 @@ public abstract class DBTable {
 	public abstract void addRow(Entity entity) throws SQLException;
 
 	// Editing entity with given value
-	public abstract void editRow(String id, Entity newEntity) throws SQLException;
+	public abstract void editRow(String id, Entity newEntity)
+			throws SQLException;
 
 	// Deleting entity with given value
 	public abstract void deleteRow(String id) throws SQLException;
 
 	// Getting an entity
 	public abstract Entity getRow(String id) throws SQLException;
-
-	public abstract ResultSet getAllFormatted(String orderField);
 
 }
