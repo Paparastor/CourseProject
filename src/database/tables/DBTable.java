@@ -1,12 +1,12 @@
-package database;
+package database.tables;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import database.Database;
 import entities.Entity;
 
 public abstract class DBTable {
-
-	public static final String ORDER_BY_ID = "Order by ID";
 
 	private static String SQL_SPECS;
 
@@ -69,5 +69,8 @@ public abstract class DBTable {
 
 	// Getting an entity
 	public abstract Entity getRow(String id) throws SQLException;
+	
+	// Getting formatted data
+	//public  abstract ResultSet getFormatted(Entity entity);
 
 }

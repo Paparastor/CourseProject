@@ -1,13 +1,17 @@
-package database;
+package database.tables;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import database.Database;
 
 import entities.Entity;
 import entities.Timesheet;
 
 public class Timesheets extends DBTable {
 
+	public static final String name = "timesheets";
+	
 	public Timesheets(String creationQuery, String name) {
 		super(creationQuery, name);
 	}
@@ -48,6 +52,36 @@ public class Timesheets extends DBTable {
 				resultSet.getString("DATE"),
 				resultSet.getString("PLAN_PERCENTAGE"));
 		return timesheet;
+	}
+
+	public static ResultSet getFormatted(Entity entity) {
+		Timesheet timesheet = (Timesheet)entity;
+		String firstHalf = "select * from " + name;
+		String secondHalf = "";
+		if (timesheet.getTimesheetID().length() != 0){
+			secondHalf += " TIMESHEET_ID = " + timesheet.getTimesheetID();
+		}
+		if (timesheet.getDate().length() != 0){
+			if (timesheet.getTimesheetID().length() != 0)
+				secondHalf+=" and ";
+			secondHalf += " DATE = " + "'" + timesheet.getDate() + "'";
+		}
+		if (timesheet.getEmployeeID().length() != 0){
+			if (timesheet.getDate().length() != 0)
+				secondHalf+=" and ";
+			secondHalf += " EMPLOYEE_ID = " +  timesheet.getEmployeeID();
+		}
+		if (timesheet.getPlanPercentage().length() != 0){
+			if (timesheet.getEmployeeID().length() != 0)
+				secondHalf+=" and ";
+			secondHalf += " PLAN_PERCENTAGE = " +  timesheet.getPlanPercentage();
+		}
+		if (secondHalf.length() != 0){
+			firstHalf += " where " + secondHalf + ";";
+			System.out.println(firstHalf);
+			return Database.getResultSet(firstHalf);
+		}
+		return Database.getResultSet(firstHalf + ";");
 	}
 
 }

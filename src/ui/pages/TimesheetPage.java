@@ -1,4 +1,4 @@
-package ui;
+package ui.pages;
 
 import java.awt.FlowLayout;
 
@@ -8,18 +8,17 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class TimesheetEditPage extends JFrame {
+import ui.controllers.TimesheetPageController;
 
-	private TimesheetEditController controller;
+public class TimesheetPage extends JFrame {
+
+	private TimesheetPageController controller;
 
 	private final static int WIDTH = 250;
 	private final static int HEIGHT = 250;
 	private final static int FIELD_SIZE = 10;
 
-	public static final boolean MODE_EDIT = false;
-	public static final boolean MODE_ADD = true;
-
-	private boolean mode;
+	private int mode;
 
 	private static final long serialVersionUID = 1L;
 
@@ -31,7 +30,7 @@ public class TimesheetEditPage extends JFrame {
 	private JTextField dateField;
 	private JTextField planField;
 
-	public boolean getMode() {
+	public int getMode() {
 		return mode;
 	}
 
@@ -59,14 +58,14 @@ public class TimesheetEditPage extends JFrame {
 		return planField;
 	}
 
-	public TimesheetEditPage(String timesheetID, MainPage mainPage, boolean mode) {
+	public TimesheetPage(String timesheetID, MainPage mainPage, int mode) {
 
 		this.timesheetID = timesheetID;
 		this.mainPage = mainPage;
 		this.mode = mode;
 
 		// Setting the controller
-		controller = new TimesheetEditController(this);
+		controller = new TimesheetPageController(this);
 
 		// Setting parameters of the frame
 		this.setName("TimesheetEditPage");

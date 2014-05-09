@@ -5,6 +5,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import database.tables.DBTable;
+import database.tables.Employees;
+import database.tables.Points;
+import database.tables.Timesheets;
+
 public class Database {
 
 	private static Connection connection;

@@ -1,20 +1,20 @@
-package ui;
+package ui.pages;
 
 import java.awt.FlowLayout;
 import javax.swing.*;
 
-public class EmployeeEditPage extends JFrame {
+import ui.controllers.EmployeePageController;
+import ui.controllers.MainPageController;
+
+public class EmployeePage extends JFrame {
 	
-	private EmployeeEditController controller;
+	private EmployeePageController controller;
 
 	private final static int WIDTH = 250;
 	private final static int HEIGHT = 250;
 	private final static int FIELD_SIZE = 10;
-	
-	public static final boolean MODE_EDIT = false;
-	public static final boolean MODE_ADD = true;
 
-	private boolean mode;
+	private int mode;
 
 	private static final long serialVersionUID = 1L;
 	
@@ -27,7 +27,7 @@ public class EmployeeEditPage extends JFrame {
 	private JTextField professionTextField;
 	private JTextField pointIDTextField;
 	
-	public boolean getMode() {
+	public int getMode() {
 		return mode;
 	}
 	
@@ -59,18 +59,28 @@ public class EmployeeEditPage extends JFrame {
 		return pointIDTextField;
 	}
 
-	public EmployeeEditPage(String employeeID, MainPage mainPage, boolean mode) {
+	public EmployeePage(String employeeID, MainPage mainPage, int mode) {
 		
 		this.employeeID = employeeID;
 		this.mainPage = mainPage;
 		this.mode = mode;
 		
 		// Setting the controller
-		controller = new EmployeeEditController(this);
+		controller = new EmployeePageController(this);
 
 		// Setting parameters of the frame
 		this.setName("EmployeeEditPage");
-		this.setTitle("Edit Employee");
+		switch(mode){
+		case MainPageController.MODE_ADD:
+			this.setTitle(MainPageController.ACTION_ADD);
+			break;
+		case MainPageController.MODE_EDIT:
+			this.setTitle(MainPageController.ACTION_EDIT);
+			break;
+		case MainPageController.MODE_FILTER:
+			this.setTitle(MainPageController.ACTION_FILTER);
+			break;
+		}
 		this.setSize(WIDTH, HEIGHT);
 		this.setLayout(new FlowLayout(FlowLayout.RIGHT));
 

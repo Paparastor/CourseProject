@@ -1,11 +1,9 @@
-package ui;
+package ui.pages;
 
 import java.awt.*;
 import javax.swing.*;
 
-import database.Employees;
-import database.Points;
-import database.Timesheets;
+import ui.controllers.MainPageController;
 
 public class MainPage extends JFrame {
 
@@ -134,6 +132,16 @@ public class MainPage extends JFrame {
 		deleteButton.setActionCommand(MainPageController.ACTION_DELETE);
 		deleteButton.addActionListener(controller);
 		buttonPanel.add(deleteButton);
+		
+		JButton filterButton = new JButton("Filter");
+		filterButton.setActionCommand(MainPageController.ACTION_FILTER);
+		filterButton.addActionListener(controller);
+		buttonPanel.add(filterButton);
+		
+		JButton findButton = new JButton("Find");
+		findButton.setActionCommand(MainPageController.ACTION_FIND);
+		findButton.addActionListener(controller);
+		buttonPanel.add(findButton);
 
 		this.add(buttonPanel);
 

@@ -1,4 +1,4 @@
-package ui;
+package ui.pages;
 
 import java.awt.FlowLayout;
 
@@ -8,9 +8,11 @@ import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 
-public class PointEditPage extends JFrame {
+import ui.controllers.PointPageController;
 
-	private PointEditController controller;
+public class PointPage extends JFrame {
+
+	private PointPageController controller;
 
 	private final static int WIDTH = 250;
 	private final static int HEIGHT = 250;
@@ -19,7 +21,7 @@ public class PointEditPage extends JFrame {
 	public static final boolean MODE_EDIT = false;
 	public static final boolean MODE_ADD = true;
 
-	private boolean mode;
+	private int mode;
 
 	private static final long serialVersionUID = 1L;
 
@@ -30,7 +32,7 @@ public class PointEditPage extends JFrame {
 	private JTextField salaryField;
 	private JTextField postField;
 
-	public boolean getMode() {
+	public int getMode() {
 		return mode;
 	}
 
@@ -54,14 +56,14 @@ public class PointEditPage extends JFrame {
 		return postField;
 	}
 
-	public PointEditPage(String pointID, MainPage mainPage, boolean mode) {
+	public PointPage(String pointID, MainPage mainPage, int mode) {
 
 		this.pointID = pointID;
 		this.mainPage = mainPage;
 		this.mode = mode;
 
 		// Setting the controller
-		controller = new PointEditController(this);
+		controller = new PointPageController(this);
 
 		// Setting parameters of the frame
 		this.setName("PointEditPage");

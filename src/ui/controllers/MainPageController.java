@@ -1,4 +1,4 @@
-package ui;
+package ui.controllers;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,8 +8,14 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 
-import database.DBTable;
+import ui.MyTableModel;
+import ui.pages.EmployeePage;
+import ui.pages.MainPage;
+import ui.pages.PointPage;
+import ui.pages.TimesheetPage;
+
 import database.Database;
+import database.tables.DBTable;
 import entities.Employee;
 import entities.Entity;
 import entities.Point;
@@ -31,11 +37,17 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 	public final static String ACTION_ADD = "ADD";
 	public final static String ACTION_DELETE = "DELETE";
 	public final static String ACTION_EDIT = "EDIT";
+	public final static String ACTION_FILTER = "FILTER";
+	public final static String ACTION_FIND = "FIND";
 
 	// Specific actions for a different tables
 	public final static String ACTION_ADD_EMPLOYEE = "New Employee";
 	public final static String ACTION_ADD_POINT = "New Point";
 	public final static String ACTION_ADD_TIMESHEET = "New Timesheet";
+
+	public static final int MODE_EDIT = 0;
+	public static final int MODE_ADD = 1;
+	public static final int MODE_FILTER = 2;
 
 	// Reference to a main page
 	private MainPage mainPage;
@@ -81,6 +93,7 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 		return neededID;
 	}
 
+	// Sorting action
 	@Override
 	public void mouseClicked(MouseEvent e) {
 		JTable table;
@@ -105,7 +118,6 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 		}
 		int col = table.columnAtPoint(e.getPoint());
 		String name = table.getColumnName(col);
-		System.out.println("Column index selected " + col + " " + name);
 		table.setModel(new MyTableModel(dbTable.getAll(name)));
 	}
 
@@ -135,8 +147,8 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 				Database.getEmployees().addRow(employee);
 				DBTable table = Database.getEmployees();
 
-				EmployeeEditPage emp = new EmployeeEditPage(getNeededID(
-						employee, table), mainPage, true);
+				EmployeePage emp = new EmployeePage(
+						getNeededID(employee, table), mainPage, MODE_ADD);
 				emp.setVisible(true);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
@@ -149,8 +161,8 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 				Database.getPoints().addRow(point);
 				DBTable table = Database.getPoints();
 
-				PointEditPage emp = new PointEditPage(
-						getNeededID(point, table), mainPage, true);
+				PointPage emp = new PointPage(getNeededID(point, table),
+						mainPage, MODE_ADD);
 				emp.setVisible(true);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
@@ -163,8 +175,8 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 				Database.getTimesheets().addRow(timesheet);
 				DBTable table = Database.getTimesheets();
 
-				TimesheetEditPage tm = new TimesheetEditPage(getNeededID(
-						timesheet, table), mainPage, true);
+				TimesheetPage tm = new TimesheetPage(getNeededID(timesheet,
+						table), mainPage, MODE_ADD);
 				tm.setVisible(true);
 			} catch (SQLException e1) {
 				e1.printStackTrace();
@@ -178,15 +190,15 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 				String empModel = new MyTableModel(Database.getEmployees()
 						.getAll()).getValueAt(
 						mainPage.getEmployees().getSelectedRow(), 0).toString();
-				EmployeeEditPage em = new EmployeeEditPage(empModel, mainPage,
-						false);
+				EmployeePage em = new EmployeePage(empModel, mainPage,
+						MODE_EDIT);
 				em.setVisible(true);
 				break;
 			case NAME_POINTS:
 				String ptsModel = new MyTableModel(Database.getPoints()
 						.getAll()).getValueAt(
 						mainPage.getPoints().getSelectedRow(), 0).toString();
-				PointEditPage pt = new PointEditPage(ptsModel, mainPage, false);
+				PointPage pt = new PointPage(ptsModel, mainPage, MODE_EDIT);
 				pt.setVisible(true);
 				break;
 			case NAME_TIMESHEETS:
@@ -194,8 +206,8 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 						.getAll()).getValueAt(
 						mainPage.getTimesheets().getSelectedRow(), 0)
 						.toString();
-				TimesheetEditPage ts = new TimesheetEditPage(tsModel, mainPage,
-						false);
+				TimesheetPage ts = new TimesheetPage(tsModel, mainPage,
+						MODE_EDIT);
 				ts.setVisible(true);
 				break;
 			}
@@ -234,6 +246,25 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 				} catch (SQLException e1) {
 					e1.printStackTrace();
 				}
+				break;
+			}
+			updateTables();
+		}
+		// General filter action
+		else if (e.getActionCommand() == ACTION_FILTER) {
+			// Deletion specification
+			switch (getSelectedTab()) {
+			case NAME_EMPLOYEES:
+				EmployeePage emp = new EmployeePage("",mainPage,MODE_FILTER);
+				emp.setVisible(true);
+				break;
+			case NAME_POINTS:
+				PointPage pt = new PointPage("",mainPage,MODE_FILTER);
+				pt.setVisible(true);
+				break;
+			case NAME_TIMESHEETS:
+				TimesheetPage ts = new TimesheetPage("",mainPage,MODE_FILTER);
+				ts.setVisible(true);
 				break;
 			}
 			updateTables();
