@@ -11,6 +11,7 @@ public class Point extends Entity {
 		this.pointID = pointID;
 		this.salary = salary;
 		this.post = post;
+		super.searchParameter = "POST";
 	}
 	
 	public Point(){
@@ -39,6 +40,11 @@ public class Point extends Entity {
 
 	public void setPost(String post) {
 		this.post = post;
+	}
+
+	@Override
+	public String getSearchParameterValue() {
+		return post;
 	}
 		
 }

@@ -3,13 +3,14 @@ package database.tables;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import ui.MyTableModel;
+
 import database.Database;
 
 import entities.*;
 
 public class Employees extends DBTable {
 	
-	public static final String FILTER_BY_ = "Order by points";
 	public static final String name = "employees";
 
 	public Employees(String creationQuery, String name) {

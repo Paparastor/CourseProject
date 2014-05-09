@@ -14,6 +14,7 @@ public class Timesheet extends Entity {
 		this.employeeID = employeeID;
 		this.date = date;
 		this.planPercentage = planPercentage;
+		super.searchParameter = "DATE";
 	}
 	
 	public Timesheet(){
@@ -50,6 +51,11 @@ public class Timesheet extends Entity {
 
 	public void setPlanPercentage(String planPercentage) {
 		this.planPercentage = planPercentage;
+	}
+
+	@Override
+	public String getSearchParameterValue() {
+		return date;
 	}
 	
 }

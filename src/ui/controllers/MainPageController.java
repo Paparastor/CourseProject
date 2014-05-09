@@ -12,6 +12,7 @@ import ui.MyTableModel;
 import ui.pages.EmployeePage;
 import ui.pages.MainPage;
 import ui.pages.PointPage;
+import ui.pages.SearchPage;
 import ui.pages.TimesheetPage;
 
 import database.Database;
@@ -255,19 +256,38 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 			// Deletion specification
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
-				EmployeePage emp = new EmployeePage("",mainPage,MODE_FILTER);
+				EmployeePage emp = new EmployeePage("", mainPage, MODE_FILTER);
 				emp.setVisible(true);
 				break;
 			case NAME_POINTS:
-				PointPage pt = new PointPage("",mainPage,MODE_FILTER);
+				PointPage pt = new PointPage("", mainPage, MODE_FILTER);
 				pt.setVisible(true);
 				break;
 			case NAME_TIMESHEETS:
-				TimesheetPage ts = new TimesheetPage("",mainPage,MODE_FILTER);
+				TimesheetPage ts = new TimesheetPage("", mainPage, MODE_FILTER);
 				ts.setVisible(true);
 				break;
 			}
 			updateTables();
+		}
+		// General find action
+		else if (e.getActionCommand() == ACTION_FIND) {
+			SearchPage p;
+			switch (getSelectedTab()) {
+			case NAME_EMPLOYEES:
+				p = new SearchPage(mainPage, mainPage.getEmployees());
+				p.setVisible(true);
+				break;
+			case NAME_POINTS:
+				p = new SearchPage(mainPage, mainPage.getPoints());
+				p.setVisible(true);
+				break;
+			case NAME_TIMESHEETS:
+				p = new SearchPage(mainPage, mainPage.getTimesheets());
+				p.setVisible(true);
+				break;
+			}
+			
 		}
 	}
 }

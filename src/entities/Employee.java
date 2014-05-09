@@ -16,6 +16,7 @@ public class Employee extends Entity {
 		this.name = name;
 		this.profession = profession;
 		this.pointID = pointID;
+		super.searchParameter = "NAME";
 	}
 	
 	public Employee(){
@@ -60,6 +61,11 @@ public class Employee extends Entity {
 
 	public void setPointID(String pointID) {
 		this.pointID = pointID;
+	}
+
+	@Override
+	public String getSearchParameterValue() {
+		return name;
 	}
 	
 }
