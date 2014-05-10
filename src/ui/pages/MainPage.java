@@ -25,7 +25,7 @@ public class MainPage extends JFrame {
 	private JTable timesheets;
 	private JTable common;
 	private JTabbedPane tablePane;
-	
+
 	// Fields
 	private JComboBox<String> queriesBox;
 	private JButton executeQueryButton;
@@ -34,8 +34,8 @@ public class MainPage extends JFrame {
 	private JMenuItem addEmployeeItem;
 	private JMenuItem addPointItem;
 	private JMenuItem addTimesheetItem;
-	
-	public JButton getExecuteQueryButton(){
+
+	public JButton getExecuteQueryButton() {
 		return executeQueryButton;
 	}
 
@@ -122,6 +122,14 @@ public class MainPage extends JFrame {
 		// 'Query' item creation
 		JMenu query = new JMenu("Query");
 		menuBar.add(query);
+
+		// 'Query' item creation
+		JMenu report = new JMenu("Report");
+		JMenuItem test1 = new JMenuItem("test");
+		test1.setActionCommand("test");
+		test1.addActionListener(controller);
+		report.add(test1);
+		menuBar.add(report);
 
 		// 'Help' item creation
 		JMenu help = new JMenu("Help");
@@ -211,11 +219,11 @@ public class MainPage extends JFrame {
 		queriesBox.addItem(MainPageController.QUERY_EMPLOYEES_ON_POINT);
 		queriesBox.addItem(MainPageController.QUERY_TIMESHEETS_ON_EMPLOYEE);
 		queriesBox.addItem(MainPageController.QUERY_TIMESHEETS_ON_DATE);
-		
+
 		executeQueryButton = new JButton("Execute");
 		executeQueryButton.setActionCommand(MainPageController.ACTION_EXECUTE);
 		executeQueryButton.addActionListener(controller);
-		
+
 		c.add(queriesBox);
 		c.add(executeQueryButton);
 		c.setLayout(new BoxLayout(c, BoxLayout.Y_AXIS));

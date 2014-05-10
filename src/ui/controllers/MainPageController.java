@@ -8,6 +8,8 @@ import java.sql.SQLException;
 
 import javax.swing.*;
 
+import com.itextpdf.text.DocumentException;
+
 import ui.MyTableModel;
 import ui.pages.DialogPage;
 import ui.pages.EmployeePage;
@@ -17,6 +19,7 @@ import ui.pages.SearchPage;
 import ui.pages.TimesheetPage;
 
 import database.Database;
+import database.reports.ReportCreator;
 import database.tables.DBTable;
 import entities.Employee;
 import entities.Entity;
@@ -306,24 +309,37 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 		}
 		// Query execution
 		else if (e.getActionCommand() == ACTION_EXECUTE) {
-			
+
 			JComboBox<String> b = mainPage.getQueriesBox();
 			String value = (String) b.getSelectedItem();
 			DialogPage p;
-			if (value == QUERY_EMPLOYEES_ON_POINT){
-				p = new DialogPage(mainPage, DialogPageController.PARAMETER_POINT);
+			if (value == QUERY_EMPLOYEES_ON_POINT) {
+				p = new DialogPage(mainPage,
+						DialogPageController.PARAMETER_POINT);
 				p.setVisible(true);
-			}
-			else if (value == QUERY_TIMESHEETS_ON_DATE){
-				p = new DialogPage(mainPage, DialogPageController.PARAMETER_DATE);
+			} else if (value == QUERY_TIMESHEETS_ON_DATE) {
+				p = new DialogPage(mainPage,
+						DialogPageController.PARAMETER_DATE);
 				p.setVisible(true);
-			}
-			else if (value == QUERY_TIMESHEETS_ON_EMPLOYEE){
-				p = new DialogPage(mainPage, DialogPageController.PARAMETER_EMPLOYEE);
+			} else if (value == QUERY_TIMESHEETS_ON_EMPLOYEE) {
+				p = new DialogPage(mainPage,
+						DialogPageController.PARAMETER_EMPLOYEE);
 				p.setVisible(true);
+			} else
+				mainPage.getCommon().setModel(
+						new MyTableModel(Database.getResultSet(value)));
+		} else if (e.getActionCommand() == "test") {
+			 //ResultSet resultSet = Database.getResultSet("select * from employees;");
+			System.out.println("lolo");
+			try {
+				ReportCreator.getEmployeeInfo((Employee)Database.getEmployees().getRow("5"));
+			} catch (DocumentException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
 			}
-			else mainPage.getCommon().setModel(
-					new MyTableModel(Database.getResultSet(value)));
 		}
 
 	}
