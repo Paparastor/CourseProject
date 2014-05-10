@@ -188,25 +188,18 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 			// Editing specification
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
-				String empModel = new MyTableModel(Database.getEmployees()
-						.getAll()).getValueAt(
-						mainPage.getEmployees().getSelectedRow(), 0).toString();
+				String empModel = (String) mainPage.getEmployees().getValueAt(mainPage.getEmployees().getSelectedRow(), 0);
 				EmployeePage em = new EmployeePage(empModel, mainPage,
 						MODE_EDIT);
 				em.setVisible(true);
 				break;
 			case NAME_POINTS:
-				String ptsModel = new MyTableModel(Database.getPoints()
-						.getAll()).getValueAt(
-						mainPage.getPoints().getSelectedRow(), 0).toString();
+				String ptsModel = (String) mainPage.getPoints().getValueAt(mainPage.getPoints().getSelectedRow(), 0);
 				PointPage pt = new PointPage(ptsModel, mainPage, MODE_EDIT);
 				pt.setVisible(true);
 				break;
 			case NAME_TIMESHEETS:
-				String tsModel = new MyTableModel(Database.getTimesheets()
-						.getAll()).getValueAt(
-						mainPage.getTimesheets().getSelectedRow(), 0)
-						.toString();
+				String tsModel = (String) mainPage.getTimesheets().getValueAt(mainPage.getTimesheets().getSelectedRow(), 0);
 				TimesheetPage ts = new TimesheetPage(tsModel, mainPage,
 						MODE_EDIT);
 				ts.setVisible(true);
@@ -219,9 +212,7 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 			// Deletion specification
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
-				String emp = new MyTableModel(Database.getEmployees().getAll())
-						.getValueAt(mainPage.getEmployees().getSelectedRow(), 0)
-						.toString();
+				String emp = (String) mainPage.getEmployees().getValueAt(mainPage.getEmployees().getSelectedRow(), 0);
 				try {
 					Database.getEmployees().deleteRow(emp);
 				} catch (SQLException e1) {
@@ -229,9 +220,7 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 				}
 				break;
 			case NAME_POINTS:
-				String pts = new MyTableModel(Database.getPoints().getAll())
-						.getValueAt(mainPage.getPoints().getSelectedRow(), 0)
-						.toString();
+				String pts = (String) mainPage.getPoints().getValueAt(mainPage.getPoints().getSelectedRow(), 0);
 				try {
 					Database.getPoints().deleteRow(pts);
 				} catch (SQLException e1) {
@@ -239,9 +228,7 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 				}
 				break;
 			case NAME_TIMESHEETS:
-				String ts = new MyTableModel(Database.getTimesheets().getAll())
-						.getValueAt(mainPage.getTimesheets().getSelectedRow(),
-								0).toString();
+				String ts = (String) mainPage.getTimesheets().getValueAt(mainPage.getTimesheets().getSelectedRow(), 0);
 				try {
 					Database.getTimesheets().deleteRow(ts);
 				} catch (SQLException e1) {

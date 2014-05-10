@@ -95,6 +95,7 @@ public class MainPage extends JFrame {
 		addMenu.add(addPointItem);
 
 		addTimesheetItem = new JMenuItem("New Timesheet");
+		addTimesheetItem.addActionListener(controller);
 		addMenu.add(addTimesheetItem);
 
 		edit.add(addMenu);

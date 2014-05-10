@@ -3,8 +3,6 @@ package database.tables;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-import ui.MyTableModel;
-
 import database.Database;
 
 import entities.*;
