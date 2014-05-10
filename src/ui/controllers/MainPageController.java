@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import javax.swing.*;
 
 import ui.MyTableModel;
+import ui.pages.DialogPage;
 import ui.pages.EmployeePage;
 import ui.pages.MainPage;
 import ui.pages.PointPage;
@@ -28,6 +29,7 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 	public final static String NAME_EMPLOYEES = "employees";
 	public final static String NAME_POINTS = "points";
 	public final static String NAME_TIMESHEETS = "timesheets";
+	public final static String NAME_COMMON = "common";
 
 	// Sorting actions for a different tables
 	public final static String SORT_EMPLOYEES = "employees sorting";
@@ -40,15 +42,24 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 	public final static String ACTION_EDIT = "EDIT";
 	public final static String ACTION_FILTER = "FILTER";
 	public final static String ACTION_FIND = "FIND";
+	public final static String ACTION_COMBOBOX_CHANGED = "comboBoxChanged";
+	public final static String ACTION_EXECUTE = "EXECUTE";
 
 	// Specific actions for a different tables
 	public final static String ACTION_ADD_EMPLOYEE = "New Employee";
 	public final static String ACTION_ADD_POINT = "New Point";
 	public final static String ACTION_ADD_TIMESHEET = "New Timesheet";
 
+	// Modes
 	public static final int MODE_EDIT = 0;
 	public static final int MODE_ADD = 1;
 	public static final int MODE_FILTER = 2;
+
+	// Manually written queries
+	public final static String QUERY_EMPLOYEES_ON_POINT = "Get employees of selected point";
+	public final static String QUERY_TIMESHEETS_ON_EMPLOYEE = "Get timesheets of selected employee";
+	public final static String QUERY_TIMESHEETS_ON_DATE = "Get timesheets of selected date";
+	public final static String QUERY_BLANK = "";
 
 	// Reference to a main page
 	private MainPage mainPage;
@@ -188,18 +199,21 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 			// Editing specification
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
-				String empModel = (String) mainPage.getEmployees().getValueAt(mainPage.getEmployees().getSelectedRow(), 0);
+				String empModel = (String) mainPage.getEmployees().getValueAt(
+						mainPage.getEmployees().getSelectedRow(), 0);
 				EmployeePage em = new EmployeePage(empModel, mainPage,
 						MODE_EDIT);
 				em.setVisible(true);
 				break;
 			case NAME_POINTS:
-				String ptsModel = (String) mainPage.getPoints().getValueAt(mainPage.getPoints().getSelectedRow(), 0);
+				String ptsModel = (String) mainPage.getPoints().getValueAt(
+						mainPage.getPoints().getSelectedRow(), 0);
 				PointPage pt = new PointPage(ptsModel, mainPage, MODE_EDIT);
 				pt.setVisible(true);
 				break;
 			case NAME_TIMESHEETS:
-				String tsModel = (String) mainPage.getTimesheets().getValueAt(mainPage.getTimesheets().getSelectedRow(), 0);
+				String tsModel = (String) mainPage.getTimesheets().getValueAt(
+						mainPage.getTimesheets().getSelectedRow(), 0);
 				TimesheetPage ts = new TimesheetPage(tsModel, mainPage,
 						MODE_EDIT);
 				ts.setVisible(true);
@@ -212,7 +226,8 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 			// Deletion specification
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
-				String emp = (String) mainPage.getEmployees().getValueAt(mainPage.getEmployees().getSelectedRow(), 0);
+				String emp = (String) mainPage.getEmployees().getValueAt(
+						mainPage.getEmployees().getSelectedRow(), 0);
 				try {
 					Database.getEmployees().deleteRow(emp);
 				} catch (SQLException e1) {
@@ -220,7 +235,8 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 				}
 				break;
 			case NAME_POINTS:
-				String pts = (String) mainPage.getPoints().getValueAt(mainPage.getPoints().getSelectedRow(), 0);
+				String pts = (String) mainPage.getPoints().getValueAt(
+						mainPage.getPoints().getSelectedRow(), 0);
 				try {
 					Database.getPoints().deleteRow(pts);
 				} catch (SQLException e1) {
@@ -228,7 +244,8 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 				}
 				break;
 			case NAME_TIMESHEETS:
-				String ts = (String) mainPage.getTimesheets().getValueAt(mainPage.getTimesheets().getSelectedRow(), 0);
+				String ts = (String) mainPage.getTimesheets().getValueAt(
+						mainPage.getTimesheets().getSelectedRow(), 0);
 				try {
 					Database.getTimesheets().deleteRow(ts);
 				} catch (SQLException e1) {
@@ -274,7 +291,40 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 				p.setVisible(true);
 				break;
 			}
-			
+
+		} else if (e.getActionCommand() == ACTION_COMBOBOX_CHANGED) {
+			JComboBox<String> b = mainPage.getQueriesBox();
+			String value = (String) b.getSelectedItem();
+			if (value == QUERY_EMPLOYEES_ON_POINT
+					|| value == QUERY_TIMESHEETS_ON_DATE
+					|| value == QUERY_TIMESHEETS_ON_EMPLOYEE) {
+				mainPage.getQueriesBox().setEditable(false);
+
+			} else {
+				mainPage.getQueriesBox().setEditable(true);
+			}
 		}
+		// Query execution
+		else if (e.getActionCommand() == ACTION_EXECUTE) {
+			
+			JComboBox<String> b = mainPage.getQueriesBox();
+			String value = (String) b.getSelectedItem();
+			DialogPage p;
+			if (value == QUERY_EMPLOYEES_ON_POINT){
+				p = new DialogPage(mainPage, DialogPageController.PARAMETER_POINT);
+				p.setVisible(true);
+			}
+			else if (value == QUERY_TIMESHEETS_ON_DATE){
+				p = new DialogPage(mainPage, DialogPageController.PARAMETER_DATE);
+				p.setVisible(true);
+			}
+			else if (value == QUERY_TIMESHEETS_ON_EMPLOYEE){
+				p = new DialogPage(mainPage, DialogPageController.PARAMETER_EMPLOYEE);
+				p.setVisible(true);
+			}
+			else mainPage.getCommon().setModel(
+					new MyTableModel(Database.getResultSet(value)));
+		}
+
 	}
 }

@@ -9,7 +9,7 @@ public class MainPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 
-	private final static int WIDTH = 530;
+	private final static int WIDTH = 600;
 	private final static int HEIGHT = 570;
 
 	// Controller
@@ -23,12 +23,29 @@ public class MainPage extends JFrame {
 	private JTable employees;
 	private JTable points;
 	private JTable timesheets;
+	private JTable common;
 	private JTabbedPane tablePane;
+	
+	// Fields
+	private JComboBox<String> queriesBox;
+	private JButton executeQueryButton;
 
 	// Menu items
 	private JMenuItem addEmployeeItem;
 	private JMenuItem addPointItem;
-	private JMenuItem addTimesheetItem;	
+	private JMenuItem addTimesheetItem;
+	
+	public JButton getExecuteQueryButton(){
+		return executeQueryButton;
+	}
+
+	public JTable getCommon() {
+		return common;
+	}
+
+	public JComboBox<String> getQueriesBox() {
+		return queriesBox;
+	}
 
 	public JMenuItem getAddEmployeeItem() {
 		return addEmployeeItem;
@@ -78,8 +95,8 @@ public class MainPage extends JFrame {
 		menuBar = new JMenuBar();
 
 		// 'File' item creation
-		//JMenu file = new JMenu("File");
-		//menuBar.add(file);
+		// JMenu file = new JMenu("File");
+		// menuBar.add(file);
 
 		// 'Edit' item creation
 		JMenu edit = new JMenu("Entity");
@@ -133,12 +150,12 @@ public class MainPage extends JFrame {
 		deleteButton.setActionCommand(MainPageController.ACTION_DELETE);
 		deleteButton.addActionListener(controller);
 		buttonPanel.add(deleteButton);
-		
+
 		JButton filterButton = new JButton("Filter");
 		filterButton.setActionCommand(MainPageController.ACTION_FILTER);
 		filterButton.addActionListener(controller);
 		buttonPanel.add(filterButton);
-		
+
 		JButton findButton = new JButton("Find");
 		findButton.setActionCommand(MainPageController.ACTION_FIND);
 		findButton.addActionListener(controller);
@@ -162,28 +179,52 @@ public class MainPage extends JFrame {
 		timesheets.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		timesheets.getTableHeader().addMouseListener(controller);
 
+		common = new JTable();
+		common.setName(MainPageController.NAME_COMMON);
+		common.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+
 		controller.updateTables();
 
 		tablePane = new JTabbedPane();
 
-		// 'Employees' comboBox
+		// 'Employees' pane item
 		JPanel e = new JPanel();
 		e.setLayout(new BoxLayout(e, BoxLayout.Y_AXIS));
 		e.add(new JScrollPane(employees));
 
-		// 'Points' comboBox
+		// 'Points' pane item
 		JPanel p = new JPanel();
 		p.setLayout(new BoxLayout(p, BoxLayout.Y_AXIS));
 		p.add(new JScrollPane(points));
 
-		// 'Timesheets' comboBox
+		// 'Timesheets' pane item
 		JPanel t = new JPanel();
 		t.setLayout(new BoxLayout(t, BoxLayout.Y_AXIS));
 		t.add(new JScrollPane(timesheets));
 
+		// 'Common' pane item
+		JPanel c = new JPanel();
+		queriesBox = new JComboBox<String>();
+		queriesBox.setEditable(false);
+		queriesBox.addActionListener(controller);
+		queriesBox.addItem(MainPageController.QUERY_BLANK);
+		queriesBox.addItem(MainPageController.QUERY_EMPLOYEES_ON_POINT);
+		queriesBox.addItem(MainPageController.QUERY_TIMESHEETS_ON_EMPLOYEE);
+		queriesBox.addItem(MainPageController.QUERY_TIMESHEETS_ON_DATE);
+		
+		executeQueryButton = new JButton("Execute");
+		executeQueryButton.setActionCommand(MainPageController.ACTION_EXECUTE);
+		executeQueryButton.addActionListener(controller);
+		
+		c.add(queriesBox);
+		c.add(executeQueryButton);
+		c.setLayout(new BoxLayout(c, BoxLayout.Y_AXIS));
+		c.add(new JScrollPane(common));
+
 		tablePane.add("Employees", e);
 		tablePane.add("Points", p);
 		tablePane.add("Timesheets", t);
+		tablePane.add("Common", c);
 		this.add(tablePane);
 
 	}
