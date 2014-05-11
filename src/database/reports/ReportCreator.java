@@ -364,10 +364,13 @@ public class ReportCreator {
 			throws SQLException {
 		Paragraph paragraph = new Paragraph();
 
-		paragraph.add(new Paragraph("Point " + point.getPost() + "(ID "
+		paragraph.add(new Paragraph("Point " + point.getPost() + " (ID "
 				+ point.getPointID() + ")", plainUnderlinedText));
 
 		addEmptyLine(paragraph, 1);
+
+		paragraph.add(new Paragraph("Point's salary: " + point.getSalary(),
+				plainText));
 
 		String query = "select * from employees where employees.POINT_ID="
 				+ point.getPointID() + ";";
@@ -385,7 +388,7 @@ public class ReportCreator {
 
 			int s = 0;
 
-			for (int j = 0; j < m.getRowCount(); i++) {
+			for (int j = 0; j < m.getRowCount(); j++) {
 				s += Integer.parseInt(m.getValueAt(j, 3).toString());
 			}
 			if (m.getRowCount() != 0) {
@@ -399,8 +402,19 @@ public class ReportCreator {
 			sum /= model.getRowCount();
 		}
 
+		paragraph.add(new Paragraph("Employees count: " + model.getRowCount(),
+				plainText));
 		paragraph.add(new Paragraph("Average point's efficiency: " + sum + "%",
 				plainText));
+		if (sum <= 75) {
+			paragraph.add(new Paragraph("Profitability: Very Low ", redFont));
+		} else if (sum < 100) {
+			paragraph.add(new Paragraph("Profitability: Low ", yellowFont));
+		} else if (sum == 100) {
+			paragraph.add(new Paragraph("Profitability: Normal ", greenFont));
+		} else if (sum > 100) {
+			paragraph.add(new Paragraph("Profitability: High ", blueFont));
+		}
 
 		addEmptyLine(paragraph, 10);
 
@@ -422,7 +436,7 @@ public class ReportCreator {
 			paragraph.add(new Paragraph(
 					"Facility administration recomendations", headerText));
 
-			addEmptyLine(paragraph, 3);
+			addEmptyLine(paragraph, 6);
 
 			// Employees recomendations
 			paragraph.add(new Paragraph("Employees recomendations:",
@@ -430,26 +444,92 @@ public class ReportCreator {
 
 			addEmptyLine(paragraph, 1);
 
-			MyTableModel modelEmployees = new MyTableModel(Database.employees.getAll());
+			MyTableModel modelEmployees = new MyTableModel(
+					Database.employees.getAll());
 			for (int i = 0; i < modelEmployees.getRowCount(); i++) {
 				Employee employee = (Employee) Database.employees
 						.getRow((String) modelEmployees.getValueAt(i, 0));
 				paragraph.add(getEmployeesRecomendations(employee));
 			}
 
-			addEmptyLine(paragraph, 3);
-
-			paragraph.add(new Paragraph("Date: " + new Date().toString(),
-					plainText));
+			addEmptyLine(paragraph, 8);
 
 			// Points recomendations
 			paragraph
 					.add(new Paragraph("Points recomendations:", subHeaderText));
-			MyTableModel modelPoints = new MyTableModel(Database.points.getAll());
+
+			addEmptyLine(paragraph, 1);
+
+			MyTableModel modelPoints = new MyTableModel(
+					Database.points.getAll());
 			for (int i = 0; i < modelPoints.getRowCount(); i++) {
-				Point point = (Point)Database.points.getRow((String) modelPoints.getValueAt(i, 0));
+				Point point = (Point) Database.points
+						.getRow((String) modelPoints.getValueAt(i, 0));
 				paragraph.add(getPointsRecomendations(point));
 			}
+
+			addEmptyLine(paragraph, 15);
+
+			// Points recomendations
+			paragraph.add(new Paragraph("Summary", subHeaderText));
+
+			addEmptyLine(paragraph, 1);
+
+			MyTableModel employeesCountModel = new MyTableModel(
+					Database.getResultSet("select count(*) from employees;"));
+			paragraph.add(new Paragraph("Employees count: "
+					+ employeesCountModel.getValueAt(0, 0), plainText));
+
+			MyTableModel pointsCountModel = new MyTableModel(
+					Database.getResultSet("select count(*) from points;"));
+			paragraph.add(new Paragraph("Points count: "
+					+ pointsCountModel.getValueAt(0, 0), plainText));
+
+			MyTableModel mostEfficientEmployeeModel = new MyTableModel(
+			 Database.getResultSet("select NAME from employees where EMPLOYEE_ID in "
+			 +
+			 "(select EMPLOYEE_ID from timesheets group by EMPLOYEE_ID" +
+			 " having sum(PLAN_PERCENTAGE) in " +
+			 "(select max(PLAN_PERCENTAGE) from " +
+			 "(select sum(PLAN_PERCENTAGE) as PLAN_PERCENTAGE from timesheets group by TIMESHEET_ID)))"));
+			
+			addEmptyLine(paragraph, 1);
+			
+			paragraph.add(new Paragraph("Most efficient employees: ", plainUnderlinedText));
+			
+			for (int i=0 ; i<mostEfficientEmployeeModel.getRowCount();i++){
+				paragraph.add(new Paragraph((String) mostEfficientEmployeeModel.getValueAt(i, 0), plainText));
+			}
+
+			addEmptyLine(paragraph, 1);
+
+			MyTableModel generalEfficiencyModel = new MyTableModel(
+					Database.getResultSet("select avg(PLAN_PERCENTAGE) from timesheets;"));
+			paragraph
+					.add(new Paragraph("General facility efficiency: "
+							+ generalEfficiencyModel.getValueAt(0, 0) + "%",
+							plainText));
+
+			double efficiency = Double
+					.parseDouble((String) generalEfficiencyModel.getValueAt(0,
+							0));
+
+			if (efficiency <= 75) {
+				paragraph
+						.add(new Paragraph("Profitability: Very Low ", redFont));
+			} else if (efficiency < 100) {
+				paragraph.add(new Paragraph("Profitability: Low ", yellowFont));
+			} else if (efficiency == 100) {
+				paragraph
+						.add(new Paragraph("Profitability: Normal ", greenFont));
+			} else if (efficiency > 100) {
+				paragraph.add(new Paragraph("Profitability: High ", blueFont));
+			}
+
+			addEmptyLine(paragraph, 6);
+
+			paragraph.add(new Paragraph("Date: " + new Date().toString(),
+					plainText));
 
 			document.add(paragraph);
 			document.close();
