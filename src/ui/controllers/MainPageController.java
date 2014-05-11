@@ -333,6 +333,7 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 			System.out.println("lolo");
 			try {
 				ReportCreator.getEmployeeInfo((Employee)Database.getEmployees().getRow("5"));
+				ReportCreator.getTableDoc((Employee)Database.getEmployees().getRow("5"));
 			} catch (DocumentException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
