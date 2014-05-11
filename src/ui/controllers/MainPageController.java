@@ -329,18 +329,21 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 				mainPage.getCommon().setModel(
 						new MyTableModel(Database.getResultSet(value)));
 		} else if (e.getActionCommand() == "test") {
-			 //ResultSet resultSet = Database.getResultSet("select * from employees;");
-			System.out.println("lolo");
 			try {
-				ReportCreator.getEmployeeInfo((Employee)Database.getEmployees().getRow("5"));
-				ReportCreator.getTableDoc((Employee)Database.getEmployees().getRow("5"));
+//				 ReportCreator.getEmployeeInfo((Employee)Database.getEmployees().getRow("5"));
+//				 ReportCreator.getEmployeesTimesheets((Employee)Database.getEmployees().getRow("5"));
+//				 ReportCreator.getEmployeesFinances((Employee)Database.getEmployees().getRow("10"));
+//				 ReportCreator.getPointInfo((Point)Database.getPoints().getRow("6"));
+//				 ReportCreator.getTimesheetInfo((Timesheet)Database.getTimesheets().getRow("6"));
+				ReportCreator.generateAdministrationRecomendations();
 			} catch (DocumentException e1) {
 				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
+			} 
+//			catch (SQLException e1) {
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
 		}
 
 	}
