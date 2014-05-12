@@ -45,8 +45,13 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 	public final static String ACTION_EDIT = "EDIT";
 	public final static String ACTION_FILTER = "FILTER";
 	public final static String ACTION_FIND = "FIND";
+	public final static String ACTION_REPORT = "REPORT";
 	public final static String ACTION_COMBOBOX_CHANGED = "comboBoxChanged";
 	public final static String ACTION_EXECUTE = "EXECUTE";
+
+	// Reports action
+	public final static String ACTION_REPORT_AUTOMATIATION = "auto";
+	public final static String ACTION_REPORT_ENTITY = "entity report";
 
 	// Specific actions for a different tables
 	public final static String ACTION_ADD_EMPLOYEE = "New Employee";
@@ -328,22 +333,64 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 			} else
 				mainPage.getCommon().setModel(
 						new MyTableModel(Database.getResultSet(value)));
-		} else if (e.getActionCommand() == "test") {
+		} else if (e.getActionCommand() == ACTION_REPORT) {
+			switch (getSelectedTab()) {
+			case NAME_EMPLOYEES:
+				try {
+					Employee employee = (Employee) Database.getEmployees()
+							.getRow((String) mainPage.getEmployees()
+									.getValueAt(
+											mainPage.getEmployees()
+													.getSelectedRow(), 0));
+					try {
+						ReportCreator.getEmployeeInfo(employee);
+					} catch (DocumentException e1) {
+						e1.printStackTrace();
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				break;
+			case NAME_POINTS:
+				try {
+					Point point = (Point) Database.getPoints().getRow(
+							(String) mainPage.getPoints().getValueAt(
+									mainPage.getPoints().getSelectedRow(), 0));
+					try {
+						ReportCreator.getPointInfo(point);
+					} catch (DocumentException e1) {
+						e1.printStackTrace();
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				break;
+			case NAME_TIMESHEETS:
+				try {
+					Timesheet timesheet = (Timesheet) Database.getTimesheets()
+							.getRow((String) mainPage.getTimesheets()
+									.getValueAt(
+											mainPage.getTimesheets()
+													.getSelectedRow(), 0));
+					try {
+						ReportCreator.getTimesheetInfo(timesheet);
+					} catch (DocumentException e1) {
+						e1.printStackTrace();
+					}
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				break;
+			}
+		} else if (e.getActionCommand() == ACTION_REPORT_AUTOMATIATION) {
 			try {
-//				 ReportCreator.getEmployeeInfo((Employee)Database.getEmployees().getRow("5"));
-//				 ReportCreator.getEmployeesTimesheets((Employee)Database.getEmployees().getRow("5"));
-//				 ReportCreator.getEmployeesFinances((Employee)Database.getEmployees().getRow("10"));
-//				 ReportCreator.getPointInfo((Point)Database.getPoints().getRow("6"));
-//				 ReportCreator.getTimesheetInfo((Timesheet)Database.getTimesheets().getRow("6"));
 				ReportCreator.generateAdministrationRecomendations();
 			} catch (DocumentException e1) {
-				// TODO Auto-generated catch block
 				e1.printStackTrace();
-			} 
-//			catch (SQLException e1) {
-//				// TODO Auto-generated catch block
-//				e1.printStackTrace();
-//			}
+			}
+		} else if (e.getActionCommand() == ACTION_REPORT_ENTITY) {
+			this.actionPerformed(new ActionEvent(this,
+					ActionEvent.ACTION_PERFORMED, ACTION_REPORT));
 		}
 
 	}

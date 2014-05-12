@@ -22,13 +22,15 @@ import entities.*;
 
 public class ReportCreator {
 
-	private final static String FILE_EMPLOYEE_INFO = "reports/Employee Info Report ";
-	private final static String FILE_POINT_INFO = "reports/Point Info Report ";
-	private final static String FILE_TIMESHEET_INFO = "reports/Timesheet Info Report ";
+	private final static String FOLDER_PATH = "reports/";
+	
+	private final static String FILE_EMPLOYEE_INFO = "Employee Info Report ";
+	private final static String FILE_POINT_INFO = "Point Info Report ";
+	private final static String FILE_TIMESHEET_INFO = "Timesheet Info Report ";
 
-	private final static String FILE_EMPLOYEES_TIMESHEETS = "reports/Employee's Timesheets Report ";
-	private final static String FILE_EMPLOYEES_FINANCES = "reports/Employee's Finances Report ";
-	private final static String FILE_FACILITY_ADMINISTRATION = "reports/Facility Administration Recomendations";
+	private final static String FILE_EMPLOYEES_TIMESHEETS = "Employee's Timesheets Report ";
+	private final static String FILE_EMPLOYEES_FINANCES = "Employee's Finances Report ";
+	private final static String FILE_FACILITY_ADMINISTRATION = "Facility Administration Recomendations";
 
 	private static Font headerText = new Font(Font.FontFamily.TIMES_ROMAN, 30,
 			Font.BOLD);
@@ -78,7 +80,7 @@ public class ReportCreator {
 		Document document = new Document();
 		try {
 			PdfWriter.getInstance(document, new FileOutputStream(
-					FILE_EMPLOYEE_INFO + new Date().toString() + ".pdf"));
+					FOLDER_PATH + FILE_EMPLOYEE_INFO + new Date().toString() + ".pdf"));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -117,7 +119,7 @@ public class ReportCreator {
 		Document document = new Document();
 		try {
 			PdfWriter.getInstance(document, new FileOutputStream(
-					FILE_POINT_INFO + new Date().toString() + ".pdf"));
+					FOLDER_PATH + FILE_POINT_INFO + new Date().toString() + ".pdf"));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -154,7 +156,7 @@ public class ReportCreator {
 		Document document = new Document();
 		try {
 			PdfWriter.getInstance(document, new FileOutputStream(
-					FILE_TIMESHEET_INFO + new Date().toString() + ".pdf"));
+					FOLDER_PATH + FILE_TIMESHEET_INFO + new Date().toString() + ".pdf"));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -198,7 +200,7 @@ public class ReportCreator {
 		try {
 			PdfWriter
 					.getInstance(document, new FileOutputStream(
-							FILE_EMPLOYEES_TIMESHEETS + new Date().toString()
+							FOLDER_PATH + FILE_EMPLOYEES_TIMESHEETS + new Date().toString()
 									+ ".pdf"));
 			document.open();
 
@@ -247,7 +249,7 @@ public class ReportCreator {
 		Document document = new Document();
 		try {
 			PdfWriter.getInstance(document, new FileOutputStream(
-					FILE_EMPLOYEES_FINANCES + new Date().toString() + ".pdf"));
+					FOLDER_PATH + FILE_EMPLOYEES_FINANCES + new Date().toString() + ".pdf"));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -427,7 +429,7 @@ public class ReportCreator {
 		Document document = new Document();
 		try {
 			PdfWriter.getInstance(document, new FileOutputStream(
-					FILE_FACILITY_ADMINISTRATION + new Date().toString()
+					FOLDER_PATH + FILE_FACILITY_ADMINISTRATION + new Date().toString()
 							+ ".pdf"));
 			document.open();
 

@@ -94,14 +94,9 @@ public class MainPage extends JFrame {
 		// Menu bar creation
 		menuBar = new JMenuBar();
 
-		// 'File' item creation
-		// JMenu file = new JMenu("File");
-		// menuBar.add(file);
-
 		// 'Edit' item creation
 		JMenu edit = new JMenu("Entity");
 		JMenu addMenu = new JMenu("Add...");
-		JMenu findMenu = new JMenu("Find...");
 
 		addEmployeeItem = new JMenuItem(MainPageController.ACTION_ADD_EMPLOYEE);
 		addEmployeeItem.addActionListener(controller);
@@ -116,19 +111,21 @@ public class MainPage extends JFrame {
 		addMenu.add(addTimesheetItem);
 
 		edit.add(addMenu);
-		edit.add(findMenu);
 		menuBar.add(edit);
 
 		// 'Query' item creation
-		JMenu query = new JMenu("Query");
-		menuBar.add(query);
-
-		// 'Query' item creation
 		JMenu report = new JMenu("Report");
-		JMenuItem test1 = new JMenuItem("test");
-		test1.setActionCommand("test");
-		test1.addActionListener(controller);
-		report.add(test1);
+		
+		JMenuItem administrationRecomendations= new JMenuItem("Administration Recomendations");
+		administrationRecomendations.setActionCommand(MainPageController.ACTION_REPORT_AUTOMATIATION);
+		administrationRecomendations.addActionListener(controller);
+		report.add(administrationRecomendations);
+		
+		JMenuItem entityReport= new JMenuItem("Selected entity info");
+		entityReport.setActionCommand(MainPageController.ACTION_REPORT_ENTITY);
+		entityReport.addActionListener(controller);
+		report.add(entityReport);
+		
 		menuBar.add(report);
 
 		// 'Help' item creation
@@ -168,6 +165,11 @@ public class MainPage extends JFrame {
 		findButton.setActionCommand(MainPageController.ACTION_FIND);
 		findButton.addActionListener(controller);
 		buttonPanel.add(findButton);
+		
+		JButton reportButton = new JButton("Report");
+		reportButton.setActionCommand(MainPageController.ACTION_REPORT);
+		reportButton.addActionListener(controller);
+		buttonPanel.add(reportButton);
 
 		this.add(buttonPanel);
 
