@@ -12,6 +12,8 @@ import ui.pages.TimesheetPage;
 
 import database.Database;
 import database.tables.Timesheets;
+import entities.Employee;
+import entities.Point;
 import entities.Timesheet;
 
 public class TimesheetPageController implements ActionListener {
@@ -20,9 +22,14 @@ public class TimesheetPageController implements ActionListener {
 
 	private Timesheet timesheet;
 
+	private MyTableModel model;
+
 	public TimesheetPageController(TimesheetPage page) {
 
 		this.page = page;
+
+		model = new MyTableModel(Database.employees.getAll());
+
 		if (page.getMode() != MainPageController.MODE_FILTER) {
 			try {
 				timesheet = (Timesheet) Database.getTimesheets().getRow(
@@ -38,22 +45,36 @@ public class TimesheetPageController implements ActionListener {
 
 	public void fillAll() {
 		page.getTimesheetIDField().setText(timesheet.getTimesheetID());
-		page.getEmployeeIDField().setText(timesheet.getEmployeeID());
-		page.getDateField().setText(timesheet.getDate());
-		page.getPlanField().setText(timesheet.getPlanPercentage());
+		for (int i = 0; i < model.getRowCount(); i++) {
+			page.getEmployeeIDField().addItem((String) model.getValueAt(i, 2));
+		}
+		if (page.getMode() == MainPageController.MODE_EDIT) {
+			Employee employee = null;
+			try {
+				employee = (Employee) Database.employees.getRow(timesheet
+						.getEmployeeID());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			page.getEmployeeIDField().setSelectedItem(employee.getName());
+			page.getDateField().setText(timesheet.getDate());
+			page.getPlanField().setText(timesheet.getPlanPercentage());
+		}
 	}
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if (e.getActionCommand() == "OK") {
 			Timesheet newTimesheet = new Timesheet(page.getTimesheetIDField()
-					.getText(), page.getEmployeeIDField().getText(), page
+					.getText(), (String) model.getValueAt(page
+					.getEmployeeIDField().getSelectedIndex(), 0), page
 					.getDateField().getText(), page.getPlanField().getText());
 			if (page.getMode() == MainPageController.MODE_FILTER) {
 				page.getMainPage()
 						.getTimesheets()
 						.setModel(
-								new MyTableModel(Timesheets.getFormatted(newTimesheet)));
+								new MyTableModel(Timesheets
+										.getFormatted(newTimesheet)));
 				page.dispose();
 			} else {
 				try {

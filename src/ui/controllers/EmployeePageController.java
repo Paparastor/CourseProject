@@ -13,6 +13,7 @@ import ui.pages.MainPage;
 import database.Database;
 import database.tables.Employees;
 import entities.Employee;
+import entities.Point;
 
 public class EmployeePageController implements ActionListener {
 
@@ -20,9 +21,13 @@ public class EmployeePageController implements ActionListener {
 
 	private Employee employee;
 
+	private MyTableModel model;
+
 	public EmployeePageController(EmployeePage page) {
 
 		this.page = page;
+
+		model = new MyTableModel(Database.points.getAll());
 
 		if (page.getMode() != MainPageController.MODE_FILTER) {
 			try {
@@ -33,8 +38,8 @@ public class EmployeePageController implements ActionListener {
 			} catch (SQLException e) {
 				System.out.println("Error: unable to read employee");
 			}
-		}
-		else employee = new Employee("","","","","");
+		} else
+			employee = new Employee("", "", "", "", "");
 	}
 
 	public void fillAll() {
@@ -42,7 +47,18 @@ public class EmployeePageController implements ActionListener {
 		page.getPassportTextField().setText(employee.getPassport());
 		page.getNameTextField().setText(employee.getName());
 		page.getProfessionTextField().setText(employee.getProfession());
-		page.getPointIDTextField().setText(employee.getPointID());
+		for (int i = 0; i < model.getRowCount(); i++) {
+			page.getPointIDTextField().addItem((String) model.getValueAt(i, 2));
+		}
+		if (page.getMode() == MainPageController.MODE_EDIT) {
+			Point point = null;
+			try {
+				point = (Point) Database.points.getRow(employee.getPointID());
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+			page.getPointIDTextField().setSelectedItem(point.getPost());
+		}
 	}
 
 	@Override
@@ -52,8 +68,9 @@ public class EmployeePageController implements ActionListener {
 					page.getIdTextField().getText(), page
 							.getPassportTextField().getText(), page
 							.getNameTextField().getText(), page
-							.getProfessionTextField().getText(), page
-							.getPointIDTextField().getText());
+							.getProfessionTextField().getText(),
+					(String) model.getValueAt(page.getPointIDTextField()
+							.getSelectedIndex(), 0));
 			if (page.getMode() == MainPageController.MODE_FILTER) {
 				page.getMainPage()
 						.getEmployees()

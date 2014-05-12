@@ -25,7 +25,7 @@ public class EmployeePage extends JFrame {
 	private JTextField passportTextField;
 	private JTextField nameTextField;
 	private JTextField professionTextField;
-	private JTextField pointIDTextField;
+	private JComboBox<String> pointIDTextField;
 	
 	public int getMode() {
 		return mode;
@@ -55,7 +55,7 @@ public class EmployeePage extends JFrame {
 		return professionTextField;
 	}
 
-	public JTextField getPointIDTextField() {
+	public JComboBox getPointIDTextField() {
 		return pointIDTextField;
 	}
 
@@ -119,8 +119,8 @@ public class EmployeePage extends JFrame {
 		// PointID field
 		JPanel pointID = new JPanel();
 		pointID.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		pointID.add(new JLabel("Point ID:"));
-		pointIDTextField = new JTextField(FIELD_SIZE);
+		pointID.add(new JLabel("Point:"));
+		pointIDTextField = new JComboBox<String>();
 		pointID.add(pointIDTextField);
 		this.add(pointID);
 

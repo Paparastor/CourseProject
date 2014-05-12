@@ -3,6 +3,7 @@ package ui.pages;
 import java.awt.FlowLayout;
 
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -14,7 +15,7 @@ public class TimesheetPage extends JFrame {
 
 	private TimesheetPageController controller;
 
-	private final static int WIDTH = 250;
+	private final static int WIDTH = 270;
 	private final static int HEIGHT = 250;
 	private final static int FIELD_SIZE = 10;
 
@@ -26,7 +27,7 @@ public class TimesheetPage extends JFrame {
 	private MainPage mainPage;
 
 	private JTextField timesheetIDField;
-	private JTextField employeeIDField;
+	private JComboBox<String> employeeIDField;
 	private JTextField dateField;
 	private JTextField planField;
 
@@ -46,7 +47,7 @@ public class TimesheetPage extends JFrame {
 		return timesheetIDField;
 	}
 
-	public JTextField getEmployeeIDField() {
+	public JComboBox<String> getEmployeeIDField() {
 		return employeeIDField;
 	}
 
@@ -84,8 +85,8 @@ public class TimesheetPage extends JFrame {
 		// Employee ID field
 		JPanel employeeIDPanel = new JPanel();
 		employeeIDPanel.setLayout(new FlowLayout(FlowLayout.RIGHT));
-		employeeIDPanel.add(new JLabel("Employee ID:"));
-		employeeIDField = new JTextField(FIELD_SIZE);
+		employeeIDPanel.add(new JLabel("Employee:"));
+		employeeIDField = new JComboBox<String>();
 		employeeIDPanel.add(employeeIDField);
 		this.add(employeeIDPanel);
 
