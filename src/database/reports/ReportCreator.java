@@ -1,5 +1,7 @@
 package database.reports;
 
+import java.awt.Desktop;
+import java.io.File;
 import java.io.FileOutputStream;
 
 import com.itextpdf.text.BaseColor;
@@ -79,8 +81,9 @@ public class ReportCreator {
 			throws DocumentException {
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream(FOLDER_PATH
-					+ FILE_EMPLOYEE_INFO + new Date().toString() + ".pdf"));
+			String filename = FOLDER_PATH
+					+ FILE_EMPLOYEE_INFO + new Date().toString() + ".pdf";
+			PdfWriter.getInstance(document, new FileOutputStream(filename));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -108,7 +111,10 @@ public class ReportCreator {
 			paragraph.add(new Paragraph("Date: " + new Date().toString(),
 					plainText));
 			document.add(paragraph);
-			document.close();
+			document.close();	
+			if (Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().open(new File(filename));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -118,8 +124,9 @@ public class ReportCreator {
 	public static void getPointInfo(Point point) throws DocumentException {
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream(FOLDER_PATH
-					+ FILE_POINT_INFO + new Date().toString() + ".pdf"));
+			String filename = FOLDER_PATH
+					+ FILE_POINT_INFO + new Date().toString() + ".pdf";
+			PdfWriter.getInstance(document, new FileOutputStream(filename));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -145,6 +152,9 @@ public class ReportCreator {
 
 			document.add(paragraph);
 			document.close();
+			if (Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().open(new File(filename));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -155,8 +165,9 @@ public class ReportCreator {
 			throws DocumentException {
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream(FOLDER_PATH
-					+ FILE_TIMESHEET_INFO + new Date().toString() + ".pdf"));
+			String filename = FOLDER_PATH
+					+ FILE_TIMESHEET_INFO + new Date().toString() + ".pdf";
+			PdfWriter.getInstance(document, new FileOutputStream(filename));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -188,6 +199,9 @@ public class ReportCreator {
 
 			document.add(paragraph);
 			document.close();
+			if (Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().open(new File(filename));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -198,9 +212,10 @@ public class ReportCreator {
 			throws DocumentException {
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream(FOLDER_PATH
+			String filename = FOLDER_PATH
 					+ FILE_EMPLOYEES_TIMESHEETS + new Date().toString()
-					+ ".pdf"));
+					+ ".pdf";
+			PdfWriter.getInstance(document, new FileOutputStream(filename));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -237,6 +252,9 @@ public class ReportCreator {
 					plainText));
 			document.add(paragraph);
 			document.close();
+			if (Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().open(new File(filename));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -245,12 +263,14 @@ public class ReportCreator {
 	// Certain employee's finances info
 	public static void getEmployeesFinances(Employee employee)
 			throws DocumentException {
+		
 		Document document = new Document();
 		try {
+			String filename = FOLDER_PATH
+					+ FILE_EMPLOYEES_FINANCES + new Date().toString()
+					+ ".pdf";
 			PdfWriter
-					.getInstance(document, new FileOutputStream(FOLDER_PATH
-							+ FILE_EMPLOYEES_FINANCES + new Date().toString()
-							+ ".pdf"));
+					.getInstance(document, new FileOutputStream(filename));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -294,6 +314,9 @@ public class ReportCreator {
 					plainText));
 			document.add(paragraph);
 			document.close();
+			if (Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().open(new File(filename));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -429,9 +452,10 @@ public class ReportCreator {
 			throws DocumentException {
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream(FOLDER_PATH
+			String filename = FOLDER_PATH
 					+ FILE_FACILITY_ADMINISTRATION + new Date().toString()
-					+ ".pdf"));
+					+ ".pdf";
+			PdfWriter.getInstance(document, new FileOutputStream(filename));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -535,6 +559,9 @@ public class ReportCreator {
 
 			document.add(paragraph);
 			document.close();
+			if (Desktop.isDesktopSupported()) {
+				Desktop.getDesktop().open(new File(filename));
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

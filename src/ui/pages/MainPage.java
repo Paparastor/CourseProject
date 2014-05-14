@@ -1,6 +1,10 @@
 package ui.pages;
 
 import java.awt.*;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.table.JTableHeader;
 
@@ -13,7 +17,7 @@ public class MainPage extends JFrame {
 	
 	private static final long serialVersionUID = 1L;
 
-	private final static int WIDTH = 600;
+	private final static int WIDTH = 620;
 	private final static int HEIGHT = 570;
 
 	// Controller
@@ -159,6 +163,16 @@ public class MainPage extends JFrame {
 		entityReport.setActionCommand(MainPageController.ACTION_REPORT_ENTITY);
 		entityReport.addActionListener(controller);
 		report.add(entityReport);
+		
+		JMenuItem employeeFinancesReport = new JMenuItem("Selected employees finances info");
+		employeeFinancesReport.setActionCommand(MainPageController.ACTION_EMPLOYEE_FINANCES);
+		employeeFinancesReport.addActionListener(controller);
+		report.add(employeeFinancesReport);
+		
+		JMenuItem employeeTimesheetsReport = new JMenuItem("Selected employees timesheets");
+		employeeTimesheetsReport.setActionCommand(MainPageController.ACTION_EMPLOYEE_TIMESHEETS);
+		employeeTimesheetsReport.addActionListener(controller);
+		report.add(employeeTimesheetsReport);
 
 		menuBar.add(report);
 
@@ -180,30 +194,66 @@ public class MainPage extends JFrame {
 		addButton.addActionListener(controller);
 		buttonPanel.add(addButton);
 
+		try {
+		    Image img = ImageIO.read(new File("images/add_term.png"));
+		    addButton.setIcon(new ImageIcon(img));
+		  } catch (IOException ex) {
+		  }
+		
 		JButton editButton = new JButton("Edit");
 		editButton.setActionCommand(MainPageController.ACTION_EDIT);
 		editButton.addActionListener(controller);
 		buttonPanel.add(editButton);
+		
+		try {
+		    Image img = ImageIO.read(new File("images/edit_term.png"));
+		    editButton.setIcon(new ImageIcon(img));
+		  } catch (IOException ex) {
+		  }
 
 		JButton deleteButton = new JButton("Delete");
 		deleteButton.setActionCommand(MainPageController.ACTION_DELETE);
 		deleteButton.addActionListener(controller);
 		buttonPanel.add(deleteButton);
+		
+		try {
+		    Image img = ImageIO.read(new File("images/delete_term.png"));
+		    deleteButton.setIcon(new ImageIcon(img));
+		  } catch (IOException ex) {
+		  }
 
 		JButton filterButton = new JButton("Filter");
 		filterButton.setActionCommand(MainPageController.ACTION_FILTER);
 		filterButton.addActionListener(controller);
 		buttonPanel.add(filterButton);
+		
+		try {
+		    Image img = ImageIO.read(new File("images/filter.png"));
+		    filterButton.setIcon(new ImageIcon(img));
+		  } catch (IOException ex) {
+		  }
 
 		JButton findButton = new JButton("Find");
 		findButton.setActionCommand(MainPageController.ACTION_FIND);
 		findButton.addActionListener(controller);
 		buttonPanel.add(findButton);
+		
+		try {
+		    Image img = ImageIO.read(new File("images/search.png"));
+		    findButton.setIcon(new ImageIcon(img));
+		  } catch (IOException ex) {
+		  }
 
 		JButton reportButton = new JButton("Report");
 		reportButton.setActionCommand(MainPageController.ACTION_REPORT);
 		reportButton.addActionListener(controller);
 		buttonPanel.add(reportButton);
+		
+		try {
+		    Image img = ImageIO.read(new File("images/report.png"));
+		    reportButton.setIcon(new ImageIcon(img));
+		  } catch (IOException ex) {
+		  }
 
 		this.add(buttonPanel);
 
@@ -279,6 +329,7 @@ public class MainPage extends JFrame {
 		if (!mode){
 			administrationRecomendations.setEnabled(false);
 			addButton.setEnabled(false);
+			deleteButton.setEnabled(false);
 			addMenu.setEnabled(false);
 			tablePane.remove(3);
 		}

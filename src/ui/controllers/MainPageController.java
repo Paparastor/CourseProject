@@ -55,6 +55,8 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 	// Reports action
 	public final static String ACTION_REPORT_AUTOMATIATION = "auto";
 	public final static String ACTION_REPORT_ENTITY = "entity report";
+	public final static String ACTION_EMPLOYEE_FINANCES = "employee's finances";
+	public final static String ACTION_EMPLOYEE_TIMESHEETS = "employee's timesheets";
 
 	// Specific actions for a different tables
 	public final static String ACTION_ADD_EMPLOYEE = "New Employee";
@@ -482,6 +484,42 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 		} else if (e.getActionCommand() == ACTION_REPORT_ENTITY) {
 			this.actionPerformed(new ActionEvent(this,
 					ActionEvent.ACTION_PERFORMED, ACTION_REPORT));
+		} else if (e.getActionCommand() == ACTION_EMPLOYEE_FINANCES) {
+			if (getSelectedTab()==NAME_EMPLOYEES){
+				Employee employee = null;
+				try {
+					employee = (Employee) Database.getEmployees()
+							.getRow((String) mainPage.getEmployees()
+									.getValueAt(
+											mainPage.getEmployees()
+													.getSelectedRow(), 0));
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				try {
+					ReportCreator.getEmployeesFinances(employee);
+				} catch (DocumentException e1) {
+					e1.printStackTrace();
+				}
+			}
+		} else if (e.getActionCommand() == ACTION_EMPLOYEE_TIMESHEETS) {
+			if (getSelectedTab()==NAME_EMPLOYEES){
+				Employee employee = null;
+				try {
+					employee = (Employee) Database.getEmployees()
+							.getRow((String) mainPage.getEmployees()
+									.getValueAt(
+											mainPage.getEmployees()
+													.getSelectedRow(), 0));
+				} catch (SQLException e1) {
+					e1.printStackTrace();
+				}
+				try {
+					ReportCreator.getEmployeesTimesheets(employee);
+				} catch (DocumentException e1) {
+					e1.printStackTrace();
+				}
+			}
 		}
 
 	}
