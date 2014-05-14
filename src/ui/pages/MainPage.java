@@ -8,6 +8,9 @@ import ui.controllers.MainPageController;
 
 public class MainPage extends JFrame {
 
+	public final static boolean MODE_ADMINISTRATIVE = true;
+	public final static boolean MODE_MANAGER = false;
+	
 	private static final long serialVersionUID = 1L;
 
 	private final static int WIDTH = 600;
@@ -108,7 +111,7 @@ public class MainPage extends JFrame {
 		return tablePane;
 	}
 
-	public MainPage() {
+	public MainPage(boolean mode) {
 
 		controller = new MainPageController(this);
 
@@ -272,15 +275,22 @@ public class MainPage extends JFrame {
 		tablePane.add("Timesheets", t);
 		tablePane.add("Common", c);
 		this.add(tablePane);
+		
+		if (!mode){
+			administrationRecomendations.setEnabled(false);
+			addButton.setEnabled(false);
+			addMenu.setEnabled(false);
+			tablePane.remove(3);
+		}
 
 	}
 
-	public static void main(String[] args) {
-		SwingUtilities.invokeLater(new Runnable() {
-			public void run() {
-				new MainPage();
-			}
-		});
-	}
+//	public static void main(String[] args) {
+//		SwingUtilities.invokeLater(new Runnable() {
+//			public void run() {
+//				new MainPage();
+//			}
+//		});
+//	}
 
 }
