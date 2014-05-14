@@ -23,7 +23,7 @@ import entities.*;
 public class ReportCreator {
 
 	private final static String FOLDER_PATH = "reports/";
-	
+
 	private final static String FILE_EMPLOYEE_INFO = "Employee Info Report ";
 	private final static String FILE_POINT_INFO = "Point Info Report ";
 	private final static String FILE_TIMESHEET_INFO = "Timesheet Info Report ";
@@ -79,8 +79,8 @@ public class ReportCreator {
 			throws DocumentException {
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream(
-					FOLDER_PATH + FILE_EMPLOYEE_INFO + new Date().toString() + ".pdf"));
+			PdfWriter.getInstance(document, new FileOutputStream(FOLDER_PATH
+					+ FILE_EMPLOYEE_INFO + new Date().toString() + ".pdf"));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -118,8 +118,8 @@ public class ReportCreator {
 	public static void getPointInfo(Point point) throws DocumentException {
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream(
-					FOLDER_PATH + FILE_POINT_INFO + new Date().toString() + ".pdf"));
+			PdfWriter.getInstance(document, new FileOutputStream(FOLDER_PATH
+					+ FILE_POINT_INFO + new Date().toString() + ".pdf"));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -155,8 +155,8 @@ public class ReportCreator {
 			throws DocumentException {
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream(
-					FOLDER_PATH + FILE_TIMESHEET_INFO + new Date().toString() + ".pdf"));
+			PdfWriter.getInstance(document, new FileOutputStream(FOLDER_PATH
+					+ FILE_TIMESHEET_INFO + new Date().toString() + ".pdf"));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -198,10 +198,9 @@ public class ReportCreator {
 			throws DocumentException {
 		Document document = new Document();
 		try {
-			PdfWriter
-					.getInstance(document, new FileOutputStream(
-							FOLDER_PATH + FILE_EMPLOYEES_TIMESHEETS + new Date().toString()
-									+ ".pdf"));
+			PdfWriter.getInstance(document, new FileOutputStream(FOLDER_PATH
+					+ FILE_EMPLOYEES_TIMESHEETS + new Date().toString()
+					+ ".pdf"));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -248,8 +247,10 @@ public class ReportCreator {
 			throws DocumentException {
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream(
-					FOLDER_PATH + FILE_EMPLOYEES_FINANCES + new Date().toString() + ".pdf"));
+			PdfWriter
+					.getInstance(document, new FileOutputStream(FOLDER_PATH
+							+ FILE_EMPLOYEES_FINANCES + new Date().toString()
+							+ ".pdf"));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -428,9 +429,9 @@ public class ReportCreator {
 			throws DocumentException {
 		Document document = new Document();
 		try {
-			PdfWriter.getInstance(document, new FileOutputStream(
-					FOLDER_PATH + FILE_FACILITY_ADMINISTRATION + new Date().toString()
-							+ ".pdf"));
+			PdfWriter.getInstance(document, new FileOutputStream(FOLDER_PATH
+					+ FILE_FACILITY_ADMINISTRATION + new Date().toString()
+					+ ".pdf"));
 			document.open();
 
 			Paragraph paragraph = new Paragraph();
@@ -488,19 +489,18 @@ public class ReportCreator {
 					+ pointsCountModel.getValueAt(0, 0), plainText));
 
 			MyTableModel mostEfficientEmployeeModel = new MyTableModel(
-			 Database.getResultSet("select NAME from employees where EMPLOYEE_ID in "
-			 +
-			 "(select EMPLOYEE_ID from timesheets group by EMPLOYEE_ID" +
-			 " having sum(PLAN_PERCENTAGE) in " +
-			 "(select max(PLAN_PERCENTAGE) from " +
-			 "(select sum(PLAN_PERCENTAGE) as PLAN_PERCENTAGE from timesheets group by TIMESHEET_ID)))"));
-			
+					Database.getResultSet("select NAME from employees where EMPLOYEE_ID =(select EMPLOYEE_ID from ( "
+							+ " (select EMPLOYEE_ID, max(PLAN) from " +
+							"(select EMPLOYEE_ID, avg(PLAN_PERCENTAGE) as PLAN from timesheets group by EMPLOYEE_ID))));"));
+
 			addEmptyLine(paragraph, 1);
-			
-			paragraph.add(new Paragraph("Most efficient employees: ", plainUnderlinedText));
-			
-			for (int i=0 ; i<mostEfficientEmployeeModel.getRowCount();i++){
-				paragraph.add(new Paragraph((String) mostEfficientEmployeeModel.getValueAt(i, 0), plainText));
+
+			paragraph.add(new Paragraph("Most efficient employees: ",
+					plainUnderlinedText));
+
+			for (int i = 0; i < mostEfficientEmployeeModel.getRowCount(); i++) {
+				paragraph.add(new Paragraph((String) mostEfficientEmployeeModel
+						.getValueAt(i, 0), plainText));
 			}
 
 			addEmptyLine(paragraph, 1);

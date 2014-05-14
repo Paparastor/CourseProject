@@ -107,7 +107,6 @@ public class Database {
 		statement = connection.createStatement();
 		statement.executeUpdate(query);
 		statement.close();
-
 	}
 
 }

@@ -12,10 +12,13 @@ import com.itextpdf.text.DocumentException;
 
 import ui.MyTableModel;
 import ui.pages.DialogPage;
+import ui.pages.EmployeeFilterPage;
 import ui.pages.EmployeePage;
 import ui.pages.MainPage;
+import ui.pages.PointFilterPage;
 import ui.pages.PointPage;
 import ui.pages.SearchPage;
+import ui.pages.TimesheetFilterPage;
 import ui.pages.TimesheetPage;
 
 import database.Database;
@@ -69,6 +72,43 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 	public final static String QUERY_TIMESHEETS_ON_DATE = "Get timesheets of selected date";
 	public final static String QUERY_BLANK = "";
 
+	private String currentPointsQuery;
+	private boolean currentPointsState;
+
+	private String currentEmployeesQuery;
+	private boolean currentEmployeesState;
+
+	private String currentTimesheetsQuery;
+	private boolean currentTimesheetsState;
+
+	public String getcurrentpointsquery() {
+		return currentPointsQuery;
+	}
+
+	public String getCurrentEmployeesQuery() {
+		return currentEmployeesQuery;
+	}
+
+	public String getCurrentTimesheetsQuery() {
+		return currentTimesheetsQuery;
+	}
+
+	public String getCurrentPointsQuery() {
+		return currentPointsQuery;
+	}
+
+	public void setCurrentPointsQuery(String currentPointsQuery) {
+		this.currentPointsQuery = currentPointsQuery;
+	}
+
+	public void setCurrentEmployeesQuery(String currentEmployeesQuery) {
+		this.currentEmployeesQuery = currentEmployeesQuery;
+	}
+
+	public void setCurrentTimesheetsQuery(String currentTimesheetsQuery) {
+		this.currentTimesheetsQuery = currentTimesheetsQuery;
+	}
+
 	// Reference to a main page
 	private MainPage mainPage;
 
@@ -82,12 +122,23 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 
 	// Updating all the tables
 	public void updateTables() {
+		currentEmployeesQuery = "select * from employees;";
+		currentEmployeesState = true;
+
+		currentPointsQuery = "select * from points;";
+		currentPointsState = true;
+
+		currentTimesheetsQuery = "select * from timesheets;";
+		currentTimesheetsState = true;
+
 		mainPage.getEmployees().setModel(
-				new MyTableModel(Database.getEmployees().getAll()));
+				new MyTableModel(Database.getResultSet(currentEmployeesQuery)));
 		mainPage.getPoints().setModel(
-				new MyTableModel(Database.getPoints().getAll()));
-		mainPage.getTimesheets().setModel(
-				new MyTableModel(Database.getTimesheets().getAll()));
+				new MyTableModel(Database.getResultSet(currentPointsQuery)));
+		mainPage.getTimesheets()
+				.setModel(
+						new MyTableModel(Database
+								.getResultSet(currentTimesheetsQuery)));
 	}
 
 	// Getting currently selected tab
@@ -116,29 +167,63 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 	// Sorting action
 	@Override
 	public void mouseClicked(MouseEvent e) {
-		JTable table;
-		DBTable dbTable;
+		int col;
+		String name;
+		String newQuery;
+		String state;
 		switch (getSelectedTab()) {
 		case NAME_EMPLOYEES:
-			table = mainPage.getEmployees();
-			dbTable = Database.getEmployees();
+			col = mainPage.getEmployees().columnAtPoint(e.getPoint());
+			name = mainPage.getEmployees().getColumnName(col);
+			if (currentEmployeesState) {
+				state = " asc";
+				currentEmployeesState = false;
+			} else {
+				state = " desc";
+				currentEmployeesState = true;
+			}
+			newQuery = currentEmployeesQuery.substring(0,
+					currentEmployeesQuery.length() - 1)
+					+ " order by " + name + state + ";";
+			System.out.println(newQuery);
+			mainPage.getEmployees().setModel(
+					new MyTableModel(Database.getResultSet(newQuery)));
 			break;
 		case NAME_POINTS:
-			table = mainPage.getPoints();
-			dbTable = Database.getPoints();
+			col = mainPage.getPoints().columnAtPoint(e.getPoint());
+			name = mainPage.getPoints().getColumnName(col);
+			if (currentPointsState) {
+				state = " asc";
+				currentPointsState = false;
+			} else {
+				state = " desc";
+				currentPointsState = true;
+			}
+			newQuery = currentPointsQuery.substring(0,
+					currentPointsQuery.length() - 1)
+					+ " order by " + name + state + ";";
+			mainPage.getPoints().setModel(
+					new MyTableModel(Database.getResultSet(newQuery)));
 			break;
 		case NAME_TIMESHEETS:
-			table = mainPage.getTimesheets();
-			dbTable = Database.getTimesheets();
-			break;
-		default:
-			table = null;
-			dbTable = null;
+			col = mainPage.getTimesheets().columnAtPoint(e.getPoint());
+			name = mainPage.getTimesheets().getColumnName(col);
+			if (currentTimesheetsState) {
+				state = " asc";
+				currentTimesheetsState = false;
+			} else {
+				state = " desc";
+				currentTimesheetsState = true;
+			}
+			newQuery = currentTimesheetsQuery.substring(0,
+					currentTimesheetsQuery.length() - 1)
+					+ " order by "
+					+ name + state
+					+ ";";
+			mainPage.getTimesheets().setModel(
+					new MyTableModel(Database.getResultSet(newQuery)));
 			break;
 		}
-		int col = table.columnAtPoint(e.getPoint());
-		String name = table.getColumnName(col);
-		table.setModel(new MyTableModel(dbTable.getAll(name)));
 	}
 
 	@Override
@@ -268,15 +353,21 @@ public class MainPageController extends MouseAdapter implements ActionListener {
 			// Deletion specification
 			switch (getSelectedTab()) {
 			case NAME_EMPLOYEES:
-				EmployeePage emp = new EmployeePage("", mainPage, MODE_FILTER);
+//				EmployeePage emp = new EmployeePage("", mainPage, MODE_FILTER);
+//				emp.setVisible(true);
+				EmployeeFilterPage emp = new EmployeeFilterPage(mainPage);
 				emp.setVisible(true);
 				break;
 			case NAME_POINTS:
-				PointPage pt = new PointPage("", mainPage, MODE_FILTER);
+				// PointPage pt = new PointPage("", mainPage, MODE_FILTER);
+				// pt.setVisible(true);
+				PointFilterPage pt = new PointFilterPage(mainPage);
 				pt.setVisible(true);
 				break;
 			case NAME_TIMESHEETS:
-				TimesheetPage ts = new TimesheetPage("", mainPage, MODE_FILTER);
+//				TimesheetPage ts = new TimesheetPage("", mainPage, MODE_FILTER);
+//				ts.setVisible(true);
+				TimesheetFilterPage ts = new TimesheetFilterPage(mainPage);
 				ts.setVisible(true);
 				break;
 			}

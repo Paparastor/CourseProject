@@ -2,6 +2,7 @@ package ui.pages;
 
 import java.awt.*;
 import javax.swing.*;
+import javax.swing.table.JTableHeader;
 
 import ui.controllers.MainPageController;
 
@@ -34,6 +35,34 @@ public class MainPage extends JFrame {
 	private JMenuItem addEmployeeItem;
 	private JMenuItem addPointItem;
 	private JMenuItem addTimesheetItem;
+
+	private String currentPointsQuery;
+	private String currentEmployeesQuery;
+	private String currentTimesheetsQuery;
+
+	public String getCurrentPointsQuery() {
+		return currentPointsQuery;
+	}
+
+	public String getCurrentEmployeesQuery() {
+		return currentEmployeesQuery;
+	}
+
+	public String getCurrentTimesheetsQuery() {
+		return currentTimesheetsQuery;
+	}
+
+	public void setCurrentPointsQuery(String currentPointsQuery) {
+		this.currentPointsQuery = currentPointsQuery;
+	}
+
+	public void setCurrentEmployeesQuery(String currentEmployeesQuery) {
+		this.currentEmployeesQuery = currentEmployeesQuery;
+	}
+
+	public void setCurrentTimesheetsQuery(String currentTimesheetsQuery) {
+		this.currentTimesheetsQuery = currentTimesheetsQuery;
+	}
 
 	public JButton getExecuteQueryButton() {
 		return executeQueryButton;
@@ -115,17 +144,19 @@ public class MainPage extends JFrame {
 
 		// 'Query' item creation
 		JMenu report = new JMenu("Report");
-		
-		JMenuItem administrationRecomendations= new JMenuItem("Administration Recomendations");
-		administrationRecomendations.setActionCommand(MainPageController.ACTION_REPORT_AUTOMATIATION);
+
+		JMenuItem administrationRecomendations = new JMenuItem(
+				"Administration Recomendations");
+		administrationRecomendations
+				.setActionCommand(MainPageController.ACTION_REPORT_AUTOMATIATION);
 		administrationRecomendations.addActionListener(controller);
 		report.add(administrationRecomendations);
-		
-		JMenuItem entityReport= new JMenuItem("Selected entity info");
+
+		JMenuItem entityReport = new JMenuItem("Selected entity info");
 		entityReport.setActionCommand(MainPageController.ACTION_REPORT_ENTITY);
 		entityReport.addActionListener(controller);
 		report.add(entityReport);
-		
+
 		menuBar.add(report);
 
 		// 'Help' item creation
@@ -165,7 +196,7 @@ public class MainPage extends JFrame {
 		findButton.setActionCommand(MainPageController.ACTION_FIND);
 		findButton.addActionListener(controller);
 		buttonPanel.add(findButton);
-		
+
 		JButton reportButton = new JButton("Report");
 		reportButton.setActionCommand(MainPageController.ACTION_REPORT);
 		reportButton.addActionListener(controller);
@@ -178,6 +209,11 @@ public class MainPage extends JFrame {
 		employees.setName(MainPageController.NAME_EMPLOYEES);
 		employees.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		employees.getTableHeader().addMouseListener(controller);
+
+		JTableHeader header = employees.getTableHeader();
+		header.setUpdateTableInRealTime(true);
+		//header.addMouseListener(tableModel.new ColumnListener(table));
+		header.setReorderingAllowed(true);
 
 		points = new JTable();
 		points.setName(MainPageController.NAME_POINTS);
